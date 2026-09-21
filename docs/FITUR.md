@@ -42,8 +42,8 @@ editor **Rak/Tag**, dan **Daftar Bab** (ketuk bab untuk langsung lompat).
 
 Aktifkan via tombol tangan di bar atas (label **Mode Kamus**), lalu ketuk atau
 tahan kata di teks — tanpa menu sistem. Popover menampilkan kana (hiragana +
-katakana), romaji, arti Indonesia untuk kata N5 (badge hijau **N5**), kelas
-kata, arti kamus offline, catatan konjugasi (mis. “→ よむ: bentuk ～て”),
+katakana), romaji, arti Indonesia (kurasi N5 + Wikikamus, berlabel sumber),
+kelas kata, arti kamus offline, catatan konjugasi (mis. “→ よむ: bentuk ～て”),
 bedah kanji, tombol 🔊 dengarkan, 🐢 dengarkan pelan (0.6x), dan ⭐ simpan.
 
 | Mau apa | Caranya |
@@ -52,7 +52,12 @@ bedah kanji, tombol 🔊 dengarkan, 🐢 dengarkan pelan (0.6x), dan ⭐ simpan.
 | Lihat/hapus kosakata | **Menu & Bab** → tab **Kosa** → hapus per baris |
 | Ekspor ke Anki | Tab **Kosa** → **Ekspor Anki** (TSV: surface/kana/romaji/pos/arti) |
 | Bedah kalimat | Toolbar seleksi → **Kamus & Bedah** (arti + konjugasi + **rōmaji tiap kata**) |
-| Terjemahan kalimat | Online (MyMemory) + **cache offline** otomatis; bila offline murni → **rakit harfiah** kata-per-kata (urutan Jepang) |
+| Arti Indonesia berlapis | Tiap kata dicari berurutan: **🇮🇩 kurasi N5 → 🇮🇩 Wikikamus → ≈ ~gloss** (jembatan kasar gloss Inggris, dilabeli jujur) → EN asli |
+| Kata majemuk | Ketuk bagian mana pun dari kata majemuk (mis. 実行委員会) → otomatis dicoba bentuk gabungan terpanjang dulu |
+| Nama diri | Token berpenanda nama (mis. 比企谷) tampil 👤 **“Kemungkinan nama diri”** + bacaan/romaji + bedah kanji (tanpa data tambahan) |
+| Terjemahan kalimat | Mode **Otomatis** (default): online bila bisa → offline bila tidak. Mode **Offline**/**Online** manual di Pengaturan → Terjemahan |
+| Provider online | **MyMemory** (bawaan, tanpa kunci, akurasi biasa) / **Gemini** / **OpenAI-compatible** (kunci + URL kustom). Hasil online di-cache di perangkat + label sumber (Online via X / Offline / Cache) |
+| ✨ Jelaskan (LLM) | Tombol di modal bila provider LLM + kunci siap: terjemahan akurat + makna/nuansa + tata bahasa, Bahasa Indonesia, hasil di-cache |
 | Rōmaji kalimat | Modal Terjemahan & Kamus → bagian **Rōmaji (bacaan latin)**: transkripsi per kata dari bacaan token (+ tombol Salin). Nonaktif via Pengaturan → romaji |
 | Tandai kata N5 | Garis titik hijau di bawah kata N5 yang belum disimpan (Pengaturan → Tandai kata N5; butuh “Kamus siap”) |
 

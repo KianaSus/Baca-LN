@@ -1198,7 +1198,7 @@
         <!-- Translation Result Box -->
         <div class="space-y-1">
           <div class="flex items-center justify-between text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
-            <span>Terjemahan (Bahasa Indonesia)</span>
+            <span>Terjemahan (Bahasa Indonesia) <span id="transSourceLabel" class="font-normal opacity-60 font-mono text-[10px]"></span></span>
             <button id="btnCopyTranslation" title="Salin Terjemahan" class="p-1 hover:text-emerald-600 flex items-center space-x-0.5 text-[10px] text-stone-500">
               <i data-lucide="copy" class="w-3 h-3"></i>
               <span>Salin</span>
@@ -1211,6 +1211,27 @@
             </div>
             <div id="transResultText" class="hidden"></div>
           </div>
+        </div>
+
+        <!-- Explain (LLM online saja; butuh provider + kunci di Pengaturan) -->
+        <div class="space-y-1" id="explainSection">
+          <div class="flex items-center justify-between text-[11px] font-semibold text-violet-700 dark:text-violet-400">
+            <span>✨ Penjelasan (LLM)</span>
+            <div class="flex items-center space-x-1 text-[10px] text-stone-500">
+              <button id="btnCopyExplain" title="Salin Penjelasan" class="p-1 hover:text-violet-600 flex items-center space-x-0.5">
+                <i data-lucide="copy" class="w-3 h-3"></i>
+                <span>Salin</span>
+              </button>
+              <button id="btnExplainText" title="Jelaskan teks dengan LLM" class="px-2 py-1 rounded-xl bg-violet-700 hover:bg-violet-800 text-white flex items-center space-x-1">
+                <i data-lucide="sparkles" class="w-3 h-3"></i>
+                <span>Jelaskan</span>
+              </button>
+            </div>
+          </div>
+          <div id="explainResultBox" class="p-3.5 bg-violet-500/5 dark:bg-violet-500/10 rounded-2xl border border-violet-500/20 text-xs sm:text-sm leading-relaxed font-sans min-h-[40px] relative select-text">
+            <div id="explainResultText" class="whitespace-pre-line">Ketuk “Jelaskan” untuk terjemahan akurat + makna & tata bahasa.</div>
+          </div>
+          <p id="explainHint" class="text-[10px] opacity-55">Butuh provider LLM + kunci API (Pengaturan → Terjemahan). Hasil di-cache di perangkat.</p>
         </div>
 
         <!-- Word & Kanji Breakdown Section -->
@@ -1858,6 +1879,28 @@
             </div>
             <p class="text-[10px] opacity-55 mt-1">Garis titik hijau di bawah kata N5. Butuh kamus siap (lihat toast “Kamus siap”).</p>
           </div>
+          <div class="pt-2 border-t border-stone-200 dark:border-stone-800">
+            <span class="font-medium">Terjemahan: Online / Offline</span>
+            <div class="grid grid-cols-3 gap-1.5 mt-1.5" id="transModeRow">
+              <button data-transmode="auto" class="trans-mode-btn p-2 rounded-xl border text-xs font-semibold transition-all">Otomatis</button>
+              <button data-transmode="offline" class="trans-mode-btn p-2 rounded-xl border text-xs font-semibold transition-all">Offline</button>
+              <button data-transmode="online" class="trans-mode-btn p-2 rounded-xl border text-xs font-semibold transition-all">Online</button>
+            </div>
+            <p class="text-[10px] opacity-55 mt-1">Otomatis = online bila bisa, offline bila tidak. Offline selalu bisa dipakai.</p>
+            <label class="block text-[11px] font-bold uppercase tracking-wider opacity-60 mt-2 mb-1">Provider online</label>
+            <select id="selTransProvider" class="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-amber-600">
+              <option value="mymemory">MyMemory — gratis, tanpa kunci (akurasi biasa)</option>
+              <option value="gemini">Google Gemini — butuh kunci (gratis ada batas)</option>
+              <option value="openai">OpenAI-compatible — butuh kunci + URL</option>
+            </select>
+            <div id="transKeyRow" class="flex gap-1.5 mt-1.5">
+              <input id="inputTransKey" type="password" autocomplete="off" placeholder="Tempel API key…" class="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-amber-600 font-mono">
+              <button id="btnTestTransKey" class="px-3 py-2 text-xs rounded-xl border border-stone-300 dark:border-stone-700 hover:bg-black/5 font-semibold">Tes</button>
+            </div>
+            <input id="inputTransModel" type="text" autocomplete="off" placeholder="Model (opsional, cth: gemini-2.0-flash)" class="w-full mt-1.5 px-3 py-2 text-xs rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-amber-600 font-mono">
+            <input id="inputTransBaseUrl" type="text" autocomplete="off" placeholder="Base URL kustom (khusus OpenAI-compatible)" class="w-full mt-1.5 px-3 py-2 text-xs rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 focus:outline-none focus:ring-1 focus:ring-amber-600 font-mono">
+            <p class="text-[10px] opacity-55 mt-1">🔒 Kunci hanya tersimpan di perangkat ini (tak ikut backup). Teks yang diterjemahkan/dijelaskan dikirim ke provider terpilih.</p>
+          </div>
         </div>
       </div>
 
@@ -2282,6 +2325,11 @@
       showRomaji: true, // romaji kecil di popover kamus (pemula)
       showJlpt: true, // badge N5 di popover kamus
       markN5: true, // garis titik di bawah kata N5 yang belum disimpan
+      translationMode: 'auto', // 'auto' | 'offline' | 'online' (dual-mode Tahap 4)
+      translationProvider: 'mymemory', // 'mymemory' | 'gemini' | 'openai'
+      translationApiKey: '', // kunci per perangkat saja (tak ikut backup), kosong = tanpa kunci
+      translationModel: '', // kosong = default tiap provider (murah)
+      translationBaseUrl: '', // khusus openai-compatible; kosong = https://api.openai.com/v1
       isZen: false,
       mouseMode: 'drag', // Default to intuitive drag/pan gesture mode
     };
@@ -2535,6 +2583,11 @@
       transOriginalText: document.getElementById('transOriginalText'),
       transRomajiText: document.getElementById('transRomajiText'),
       btnCopyRomaji: document.getElementById('btnCopyRomaji'),
+      transSourceLabel: document.getElementById('transSourceLabel'),
+      explainSection: document.getElementById('explainSection'),
+      btnExplainText: document.getElementById('btnExplainText'),
+      btnCopyExplain: document.getElementById('btnCopyExplain'),
+      explainResultText: document.getElementById('explainResultText'),
       transResultText: document.getElementById('transResultText'),
       transLoading: document.getElementById('transLoading'),
       transWordsList: document.getElementById('transWordsList'),
@@ -2569,6 +2622,11 @@
       toggleRomaji: document.getElementById('toggleRomaji'),
       toggleJlpt: document.getElementById('toggleJlpt'),
       toggleMarkN5: document.getElementById('toggleMarkN5'),
+      selTransProvider: document.getElementById('selTransProvider'),
+      inputTransKey: document.getElementById('inputTransKey'),
+      btnTestTransKey: document.getElementById('btnTestTransKey'),
+      inputTransModel: document.getElementById('inputTransModel'),
+      inputTransBaseUrl: document.getElementById('inputTransBaseUrl'),
 
       lightboxModal: document.getElementById('lightboxModal'),
       lightboxImg: document.getElementById('lightboxImg'),
@@ -3155,6 +3213,7 @@
       el.toggleSpineShadow.checked = config.showSpineShadow;
       // Migrasi: config lama showRuby boolean -> rubyMode.
       syncRubyModeButtons();
+      syncTranslationSettings();
 
       // Sinkron UI Tema Luar & Dalam
       if (el.toggleLinkThemes) el.toggleLinkThemes.checked = !!config.linkThemes;
@@ -3264,30 +3323,38 @@
     let idGlossN5Map = null; // kunci kata -> { id, ex_ja, ex_id, kana }
     let kanaMapData = null;  // array { kana, kata, romaji, type }
     let kanjiN5Map = null;   // kanji -> { id, on, kun, grade, jlpt }
+    let jaIdMap = null;      // kunci kata -> { id:[...], pos:[...] } (Wikikamus, CC BY-SA)
+    let enIdMap = null;      // kata Inggris -> arti Indonesia (kurasi MIT, Tahap 3)
     let n5LoadingPromise = null;
     // Kata/kanji yang sudah disimpan user = dianggap dikenal (furigana memudar).
     const knownSurfaces = new Set();
 
     async function loadN5Data() {
-      if (jlptN5Map && idGlossN5Map && kanaMapData && kanjiN5Map) return;
+      if (jlptN5Map && idGlossN5Map && kanaMapData && kanjiN5Map && jaIdMap && enIdMap) return;
       if (n5LoadingPromise) return n5LoadingPromise;
       n5LoadingPromise = (async () => {
         try {
-          const [jlpt, gloss, kana, kanji] = await Promise.all([
+          const [jlpt, gloss, kana, kanji, jaid, enid] = await Promise.all([
             fetch('./vendor/jlpt-n5.json').then(r => r.json()).catch(() => ({})),
             fetch('./vendor/id-gloss-n5.json').then(r => r.json()).catch(() => ({})),
             fetch('./vendor/kana-map.json').then(r => r.json()).catch(() => []),
             fetch('./vendor/kanji-n5.json').then(r => r.json()).catch(() => ({})),
+            fetch('./vendor/ja-id.json').then(r => r.json()).catch(() => ({})),
+            fetch('./vendor/en-id.json').then(r => r.json()).catch(() => ({})),
           ]);
           jlptN5Map = jlpt || {};
           idGlossN5Map = gloss || {};
           kanaMapData = Array.isArray(kana) ? kana : [];
           kanjiN5Map = kanji || {};
+          jaIdMap = jaid || {};
+          enIdMap = enid || {};
         } catch (e) {
           jlptN5Map = jlptN5Map || {};
           idGlossN5Map = idGlossN5Map || {};
           kanaMapData = kanaMapData || [];
           kanjiN5Map = kanjiN5Map || {};
+          jaIdMap = jaIdMap || {};
+          enIdMap = enIdMap || {};
         } finally {
           n5LoadingPromise = null;
         }
@@ -3305,11 +3372,19 @@
       return '';
     }
 
+    // Arti Indonesia: kurasi N5 dulu, lalu Wikikamus (CC BY-SA), masing-masing
+    // diberi tag sumber (src: 'n5' | 'wikikamus') untuk label jujur di UI.
     function idGlossOf(surface, kana) {
       try {
         if (idGlossN5Map) {
-          if (surface && idGlossN5Map[surface]) return idGlossN5Map[surface];
-          if (kana && idGlossN5Map[kana]) return idGlossN5Map[kana];
+          if (surface && idGlossN5Map[surface]) return { ...idGlossN5Map[surface], src: 'n5' };
+          if (kana && idGlossN5Map[kana]) return { ...idGlossN5Map[kana], src: 'n5' };
+        }
+        if (jaIdMap) {
+          const hit = (surface && jaIdMap[surface]) || (kana && jaIdMap[kana]);
+          if (hit && hit.id && hit.id.length) {
+            return { id: hit.id.join(' / '), pos: hit.pos, src: 'wikikamus' };
+          }
         }
       } catch (e) {}
       return null;
@@ -3993,12 +4068,24 @@
       const isPunct = (s) => /^[\s　、。！？「」『』（）…―ー・.,!?;:'"()[\]]+$/.test(s);
       const tok = tokens.find(t => voff >= t.i - 1 && voff < t.i - 1 + t.s.length && !isPunct(t.s));
       if (!tok) return;
-      const range = domRangeFromVisible(map.segs, tok.i - 1, tok.i - 1 + tok.s.length);
+      // Tahap 2 (Fase D): bila tap masuk rentang gabungan kata majemuk
+      // (mis. 実行+委員会 -> 実行委員会), pakai gabungan bila ada entrinya.
+      let effTok = tok;
+      const compHit = pickCompoundSpan(res.compounds, voff, tok.s.length);
+      if (compHit) {
+        try {
+          const probe = await lookupWord(compHit.s, null, null);
+          if (probe && (probe.entry || (probe.idGloss && probe.idGloss.id))) {
+            effTok = { s: compHit.s, r: null, b: compHit.s, p: '名詞', d1: '', i: compHit.i };
+          }
+        } catch (e) { /* abaikan: pakai token tunggal */ }
+      }
+      const range = domRangeFromVisible(map.segs, effTok.i - 1, effTok.i - 1 + effTok.s.length);
       if (!range) return;
       const anchor = paintLookupRange(range);
       if (!anchor) return;
 
-      el.lookupSurface.textContent = tok.s;
+      el.lookupSurface.textContent = effTok.s;
       el.lookupKana.textContent = '';
       if (el.lookupKata) el.lookupKata.textContent = '';
       el.lookupRomaji.textContent = '';
@@ -4013,26 +4100,30 @@
       resetLookupSaveBtn();
 
       lastLookupTapAt = Date.now();
-      lastLookup = { text: map.text, token: tok, compounds: res.compounds || [], info: null, sentence: extractSentence(map.text, voff) };
+      lastLookup = { text: map.text, token: effTok, compounds: res.compounds || [], info: null, sentence: extractSentence(map.text, voff) };
       placeLookupPopover(anchor);
 
       try {
-        const info = await lookupWord(tok.s, tok.r, tok.b);
-        if (!lastLookup || lastLookup.token !== tok) return; // user sudah tap kata lain
+        const info = await lookupWord(effTok.s, effTok.r, effTok.b, effTok);
+        if (!lastLookup || lastLookup.token !== effTok) return; // user sudah tap kata lain
         lastLookup.info = info;
         // Simpan kalimat konteks (maks 160 char, fallback teks blok).
         if (!lastLookup.sentence) {
           lastLookup.sentence = extractSentence(map.text, voff) || String(map.text || '').slice(0, 160);
         }
         el.lookupLoading.style.display = 'none';
-        el.lookupKana.textContent = (info.kana && info.kana !== tok.s) ? info.kana : '';
-        if (el.lookupKata) el.lookupKata.textContent = (info.kata && info.kata !== tok.s && info.kata !== info.kana) ? info.kata : '';
+        el.lookupKana.textContent = (info.kana && info.kana !== effTok.s) ? info.kana : '';
+        if (el.lookupKata) el.lookupKata.textContent = (info.kata && info.kata !== effTok.s && info.kata !== info.kana) ? info.kata : '';
         el.lookupRomaji.textContent = (config.showRomaji !== false)
           ? [info.romaji, info.posLabel ? `[${info.posLabel}]` : ''].filter(Boolean).join(' ')
           : (info.posLabel ? `[${info.posLabel}]` : '');
         if (el.lookupId) {
           if (info.idGloss && info.idGloss.id) {
-            el.lookupId.textContent = '🇮🇩 ' + info.idGloss.id;
+            el.lookupId.textContent = '🇮🇩 ' + info.idGloss.id
+              + (info.idGloss.src === 'wikikamus' ? ' · Wikikamus' : '');
+            el.lookupId.classList.remove('hidden');
+          } else if (info.bridgeId) {
+            el.lookupId.textContent = '≈ ' + info.bridgeId + ' · ~gloss';
             el.lookupId.classList.remove('hidden');
           } else {
             el.lookupId.classList.add('hidden');
@@ -4052,6 +4143,8 @@
         }
         if (info.entry && info.entry.g && info.entry.g.length) {
           el.lookupHint.textContent = info.entry.g.slice(0, 3).join('; ');
+        } else if (info.isName) {
+          el.lookupHint.textContent = '👤 Kemungkinan nama diri (orang/tempat) — arti tidak diterjemahkan, bacaan di atas.';
         } else {
           el.lookupHint.textContent = 'Arti kata belum ada di kamus offline.';
         }
@@ -4173,6 +4266,54 @@
     }));
     if (el.toggleRomaji) el.toggleRomaji.addEventListener('change', (e) => { config.showRomaji = e.target.checked; applyTypography(); });
     if (el.toggleJlpt) el.toggleJlpt.addEventListener('change', (e) => { config.showJlpt = e.target.checked; applyTypography(); });
+    // ---- Wiring Tahap 4: pengaturan terjemahan dual-mode ----
+    function syncTranslationSettings() {
+      document.querySelectorAll('.trans-mode-btn').forEach(btn => {
+        const active = btn.dataset.transmode === (config.translationMode || 'auto');
+        btn.className = 'trans-mode-btn p-2 rounded-xl border text-xs font-semibold transition-all'
+          + (active ? ' bg-amber-700/15 border-amber-700 font-bold' : ' border-stone-300 opacity-70');
+      });
+      if (el.selTransProvider) el.selTransProvider.value = config.translationProvider || 'mymemory';
+      if (el.inputTransKey && document.activeElement !== el.inputTransKey) el.inputTransKey.value = config.translationApiKey || '';
+      if (el.inputTransModel && document.activeElement !== el.inputTransModel) el.inputTransModel.value = config.translationModel || '';
+      if (el.inputTransBaseUrl && document.activeElement !== el.inputTransBaseUrl) el.inputTransBaseUrl.value = config.translationBaseUrl || '';
+      const needKey = translationProviderDef().needsKey;
+      if (el.inputTransKey) el.inputTransKey.placeholder = needKey ? 'Tempel API key ' + translationProviderLabel() + '…' : 'Tak perlu kunci untuk MyMemory';
+    }
+    document.querySelectorAll('.trans-mode-btn').forEach(btn => btn.addEventListener('click', () => {
+      config.translationMode = btn.dataset.transmode;
+      applyTypography();
+      syncExplainSection();
+      showToast('Terjemahan: ' + (config.translationMode === 'auto' ? 'Otomatis' : config.translationMode === 'offline' ? 'Offline saja' : 'Online saja'));
+    }));
+    if (el.selTransProvider) el.selTransProvider.addEventListener('change', (e) => {
+      config.translationProvider = e.target.value;
+      applyTypography();
+      syncExplainSection();
+    });
+    if (el.inputTransKey) el.inputTransKey.addEventListener('change', (e) => {
+      config.translationApiKey = e.target.value.trim();
+      try { localStorage.setItem('kokoro_reader_config', JSON.stringify(config)); } catch (err) {}
+      syncExplainSection();
+      showToast(config.translationApiKey ? 'Kunci tersimpan di perangkat' : 'Kunci dikosongkan');
+    });
+    if (el.inputTransModel) el.inputTransModel.addEventListener('change', (e) => {
+      config.translationModel = e.target.value.trim();
+      try { localStorage.setItem('kokoro_reader_config', JSON.stringify(config)); } catch (err) {}
+    });
+    if (el.inputTransBaseUrl) el.inputTransBaseUrl.addEventListener('change', (e) => {
+      config.translationBaseUrl = e.target.value.trim();
+      try { localStorage.setItem('kokoro_reader_config', JSON.stringify(config)); } catch (err) {}
+    });
+    if (el.btnTestTransKey) el.btnTestTransKey.addEventListener('click', async () => {
+      showToast('Mengetes provider…');
+      try {
+        const out = await translateOnline('おはよう。', false);
+        showToast('OK via ' + out.via + ': ' + out.text.slice(0, 60));
+      } catch (err) {
+        showToast('Gagal: ' + String((err && err.message) || err).slice(0, 90));
+      }
+    });
     if (el.toggleMarkN5) el.toggleMarkN5.addEventListener('change', (e) => {
       config.markN5 = e.target.checked;
       applyTypography();
@@ -4677,7 +4818,7 @@
       };
       let answers = shuffle(others.map(srsAnswerText).filter(Boolean));
       let surfaces = shuffle(others.map(srsPromptSurface).filter(Boolean));
-      // Fallback dari data N5 offline.
+      // Fallback dari data N5 + Wikikamus offline.
       try {
         await loadN5Data();
         if (idGlossN5Map) {
@@ -4687,6 +4828,16 @@
             if (g && g.id && !answers.includes(g.id)) answers.push(g.id);
             if (!surfaces.includes(k)) surfaces.push(k);
             if (answers.length > 60 && surfaces.length > 120) break;
+          }
+        }
+        if (jaIdMap) {
+          const keys = Object.keys(jaIdMap);
+          for (const k of keys) {
+            const g = jaIdMap[k];
+            const first = g && g.id && g.id[0];
+            if (first && !answers.includes(first)) answers.push(first);
+            if (!surfaces.includes(k)) surfaces.push(k);
+            if (answers.length > 80 && surfaces.length > 160) break;
           }
         }
       } catch (e) {}
@@ -4945,9 +5096,13 @@
       const parts = [];
       for (const tok of seq) {
         try {
-          const info = await lookupWord(tok.s, tok.r, tok.b);
-          const id = (info.idGloss && info.idGloss.id) || (info.entry && info.entry.g && info.entry.g[0]);
-          parts.push(id ? `${tok.s}[${id}]` : tok.s);
+          const info = await lookupWord(tok.s, tok.r, tok.b, tok);
+          const id = (info.idGloss && info.idGloss.id) || null;
+          if (id) parts.push(`${tok.s}[${id}]`);
+          else if (info.bridgeId) parts.push(`${tok.s}[≈${info.bridgeId}]`);
+          else if (info.isName) parts.push(`${tok.s}[nama]`);
+          else if (info.entry && info.entry.g && info.entry.g[0]) parts.push(`${tok.s}[${info.entry.g[0]}]`);
+          else parts.push(tok.s);
         } catch (e) { parts.push(tok.s); }
       }
       el.transResultText.innerHTML =
@@ -5140,6 +5295,9 @@
             if (entry.k && !jmdictMap.has(entry.k)) jmdictMap.set(entry.k, entry);
             if (entry.r && !jmdictMap.has(entry.r)) jmdictMap.set(entry.r, entry);
           }
+          // Tahap 2: gabung kamus penuh di latar (non-blokir; first-wins = kata
+          // umum tetap prioritas). Lookup pertama jalan dengan compact dulu.
+          setTimeout(() => { loadFullDictBG().catch(() => {}); }, 1500);
         } catch (e) {
           console.warn('Gagal memuat kamus offline:', e);
         } finally {
@@ -5153,6 +5311,48 @@
     function lookupDictionaryEntry(term) {
       if (!jmdictMap || !term) return null;
       return jmdictMap.get(term) || null;
+    }
+
+    // Tahap 2: muat jmdict-full.json (±18MB) sekali, gabung first-wins.
+    // Dipanggil otomatis 1,5 dtk setelah kamus compact siap; aman dipanggil ulang.
+    let jmdictFullReady = false;
+    let jmdictFullPromise = null;
+    function loadFullDictBG() {
+      if (jmdictFullReady) return Promise.resolve(true);
+      if (jmdictFullPromise) return jmdictFullPromise;
+      jmdictFullPromise = (async () => {
+        try {
+          const res = await fetch('./vendor/jmdict-full.json');
+          if (!res.ok) return false;
+          const arr = await res.json();
+          if (jmdictMap && Array.isArray(arr)) {
+            for (const entry of arr) {
+              if (!entry) continue;
+              if (entry.k && !jmdictMap.has(entry.k)) jmdictMap.set(entry.k, entry);
+              if (entry.r && !jmdictMap.has(entry.r)) jmdictMap.set(entry.r, entry);
+            }
+          }
+          jmdictFullReady = true;
+          return true;
+        } catch (e) {
+          return false; // tetap mode compact
+        } finally {
+          jmdictFullPromise = null;
+        }
+      })();
+      return jmdictFullPromise;
+    }
+
+    // Tahap 2 (Fase D): pilih rentang gabungan kata majemuk terpanjang yang
+    // mencakup voff. compounds terurut panjang-desc oleh worker. Murni (testable).
+    function pickCompoundSpan(compounds, voff, minLen) {
+      if (!Array.isArray(compounds)) return null;
+      for (const c of compounds) {
+        if (!c || !c.s || typeof c.i !== 'number') continue;
+        if (c.s.length <= (minLen || 0)) continue;
+        if (voff >= c.i - 1 && voff < c.i - 1 + c.s.length) return c;
+      }
+      return null;
     }
 
     let deinflectRules = null;
@@ -5264,7 +5464,45 @@
 
     // Lookup terpadu: surface -> kana -> base tokenizer -> deinflect -> JMdict.
     // Fase 1: + katakana, level N5, arti Indonesia (semua offline, lazy-load).
-    async function lookupWord(surface, readingKata, tokenBase) {
+    // Tahap 3 — jembatan EN→ID: terjemahkan gloss Inggris kata-per-kata secara
+    // kasar via vendor/en-id.json (kurasi MIT). Kata fungsi dibuang diam-diam,
+    // kata tak dikenal dipertahankan apa adanya (jujur). Hasil SELALU berlabel
+    // "~ID (gloss)" di UI — fallback terakhir setelah N5 → Wikikamus → EN asli.
+    const BRIDGE_SKIP = new Set([
+      'to', 'a', 'an', 'the', 'of', 'in', 'on', 'for', 'with', 'by', 'from',
+      'at', 'as', 'and', 'or', 'etc', 'esp', 'e', 'sth', 'sb', 'who', 'which',
+      'that', 'what', 'this', 'these', 'those', 'it', 'its', 'is', 'are',
+      'was', 'were', 'be', 'been', 'one', 'ones', 'such', 'so', 'up', 'out',
+      'than', 'then',
+    ]);
+
+    function bridgeEnGloss(glossArr) {
+      try {
+        if (!enIdMap || !glossArr || !glossArr.length) return null;
+        // Potong keterangan kurung "(e.g. ...)" — sumber noise ("g", contoh).
+        const first = String(glossArr[0]).split('(')[0].trim() || String(glossArr[0]);
+        const words = first.toLowerCase().match(/[a-z][a-z'-]*/g) || [];
+        const out = [];
+        let hits = 0;
+        for (const w of words) {
+          if (BRIDGE_SKIP.has(w)) continue;
+          if (enIdMap[w]) {
+            out.push(enIdMap[w].split(';')[0].trim());
+            hits++;
+          } else {
+            out.push(w);
+          }
+        }
+        if (!out.length || !hits) return null;
+        return out.join(' ');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    // Tahap 2: tokenPos opsional {p, d1} — bila tak ada entri tapi kuromoji
+    // menandai 名詞+固有名詞, kembalikan flag isName (nama diri).
+    async function lookupWord(surface, readingKata, tokenBase, tokenPos) {
       await loadDictionaryData();
       await loadDeinflectRules();
       await loadN5Data();
@@ -5295,6 +5533,11 @@
       const kata = toKata(kana);
       const jlpt = n5LevelOf(usedBase, kana) || n5LevelOf(surface, kanaSurface);
       const idGloss = idGlossOf(usedBase, kana) || idGlossOf(surface, kanaSurface);
+      // Tahap 3: bila ada entri JMdict tapi tanpa arti Indonesia, rakit kasar
+      // dari gloss Inggris pertama (dilabeli di UI, tak disimpan ke SRS).
+      const bridgeId = (!idGloss && entry && entry.g && entry.g.length)
+        ? bridgeEnGloss(entry.g)
+        : null;
       const posCode = (entry && entry.p && entry.p[0]) || '';
       const posLabel = (posCode && posIdMap && posIdMap[posCode]) || '';
       const kanji = [];
@@ -5306,7 +5549,10 @@
           }
         }
       }
-      return { entry, base: usedBase, kana, kata, romaji, jlpt, idGloss, posCode, posLabel, reasons, kanji };
+      // Tahap 2: fallback nama diri — kuromoji sudah menandai 固有名詞,
+      // jadi tak perlu data JMnedict tambahan (hemat belasan MB).
+      const isName = !entry && !!tokenPos && tokenPos.p === '名詞' && tokenPos.d1 === '固有名詞';
+      return { entry, base: usedBase, kana, kata, romaji, jlpt, idGloss, bridgeId, posCode, posLabel, reasons, kanji, isName };
     }
 
     function openTranslationModal(text) {
@@ -5317,11 +5563,145 @@
       hideSelectionToolbar();
       // Rōmaji selalu dirender di sini agar jalur Terjemah & Kamus-saja sama-sama dapat.
       renderRomajiTranscription(text);
+      // Reset kotak Jelaskan agar tak tertukar dengan teks sebelumnya.
+      if (el.explainResultText) el.explainResultText.textContent = 'Ketuk “Jelaskan” untuk terjemahan akurat + makna & tata bahasa.';
+      setTransSourceLabel('');
+      syncExplainSection();
     }
 
     function closeTranslationModal() {
       el.translationModal.classList.add('hidden');
       uiRemove('translationModal');
+    }
+
+    // =========================================================================
+    // TAHAP 4 — PROVIDER TERJEMAHAN DUAL-MODE (online akurat / offline fondasi)
+    // Online 100% opt-in; offline selalu bisa dipakai. Kunci hanya di perangkat.
+    // =========================================================================
+    const TRANSLATION_PROVIDERS = {
+      mymemory: { label: 'MyMemory', needsKey: false, isLLM: false },
+      gemini: { label: 'Gemini', needsKey: true, isLLM: true },
+      openai: { label: 'OpenAI-compatible', needsKey: true, isLLM: true },
+    };
+
+    function translationProviderDef() {
+      return TRANSLATION_PROVIDERS[config.translationProvider] || TRANSLATION_PROVIDERS.mymemory;
+    }
+
+    function translationProviderLabel() {
+      return translationProviderDef().label;
+    }
+
+    function translationHasKey() {
+      return !!((config.translationApiKey || '').trim());
+    }
+
+    // LLM hanya bisa dipakai bila provider-nya LLM dan kuncinya terisi.
+    function translationLlmReady() {
+      return translationProviderDef().isLLM && translationHasKey();
+    }
+
+    function setTransSourceLabel(txt) {
+      if (el.transSourceLabel) el.transSourceLabel.textContent = txt || '';
+    }
+
+    function promptTranslate(text) {
+      return 'Terjemahkan teks bahasa Jepang berikut ke Bahasa Indonesia yang alami (konteks: light novel). Balas HANYA dengan hasil terjemahan, tanpa penjelasan:\n\n' + text;
+    }
+
+    function buildExplainPrompt(text) {
+      return 'Jelaskan teks bahasa Jepang berikut untuk pembelajar pemula (level N5-N4). Tulis SELURUH jawaban dalam Bahasa Indonesia dengan format persis ini:\n'
+        + '1) Terjemahan: <terjemahan alami>\n'
+        + '2) Makna & nuansa: <penjelasan singkat>\n'
+        + '3) Tata bahasa: <poin-poin singkat>\n\nTeks:\n' + text;
+    }
+
+    function transExplainKey(text) {
+      return transHash('explain|' + (config.translationProvider || 'mymemory') + '|' + ((config.translationModel || '').trim() || 'default') + '|' + String(text).slice(0, 500));
+    }
+
+    async function fetchWithTimeout(url, opts, ms) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), ms || 15000);
+      try {
+        return await fetch(url, { ...(opts || {}), signal: controller.signal });
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    async function translateViaMyMemory(text) {
+      const transProtocol = 'https:';
+      const transDomain = 'api.mymemory.translated.net';
+      const queryUrl = `${transProtocol}//${transDomain}/get?q=${encodeURIComponent(text.slice(0, 500))}&langpair=ja|id`;
+      const resp = await fetchWithTimeout(queryUrl, {}, 6500);
+      if (!resp.ok) throw new Error('MyMemory HTTP ' + resp.status);
+      const data = await resp.json();
+      const resText = data && data.responseData && data.responseData.translatedText;
+      if (!resText || resText.includes('MYMEMORY WARNING')) throw new Error('MyMemory menolak/limit');
+      return resText;
+    }
+
+    async function translateViaGemini(text, explain) {
+      const key = (config.translationApiKey || '').trim();
+      if (!key) throw new Error('Kunci Gemini belum diisi (Pengaturan → Terjemahan)');
+      const model = ((config.translationModel || '').trim() || 'gemini-2.0-flash');
+      const gHost = 'generativelanguage.googleapis.com';
+      const url = 'https://' + gHost + '/v1beta/models/' + encodeURIComponent(model) + ':generateContent?key=' + encodeURIComponent(key);
+      const prompt = explain ? buildExplainPrompt(text) : promptTranslate(text);
+      const resp = await fetchWithTimeout(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 768 },
+        }),
+      }, 20000);
+      if (!resp.ok) throw new Error('Gemini HTTP ' + resp.status);
+      const data = await resp.json();
+      const out = data && data.candidates && data.candidates[0]
+        && data.candidates[0].content && data.candidates[0].content.parts
+        && data.candidates[0].content.parts.map(p => p.text || '').join('').trim();
+      if (!out) throw new Error('Gemini tanpa jawaban (cek model/kunci)');
+      return out;
+    }
+
+    async function translateViaOpenAI(text, explain) {
+      const key = (config.translationApiKey || '').trim();
+      if (!key) throw new Error('Kunci API belum diisi (Pengaturan → Terjemahan)');
+      const base = ((config.translationBaseUrl || '').trim() || 'https://api.openai.com/v1').replace(/\/+$/, '');
+      const model = ((config.translationModel || '').trim() || 'gpt-4o-mini');
+      const url = base + '/chat/completions';
+      const resp = await fetchWithTimeout(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({
+          model,
+          temperature: 0.2,
+          max_tokens: 768,
+          messages: [
+            { role: 'system', content: 'Kamu penerjemah Jepang→Indonesia untuk pembaca light novel. Jawab dalam Bahasa Indonesia.' },
+            { role: 'user', content: explain ? buildExplainPrompt(text) : promptTranslate(text) },
+          ],
+        }),
+      }, 25000);
+      if (!resp.ok) throw new Error('OpenAI-compatible HTTP ' + resp.status);
+      const data = await resp.json();
+      const out = data && data.choices && data.choices[0]
+        && data.choices[0].message && (data.choices[0].message.content || '').trim();
+      if (!out) throw new Error('Model tanpa jawaban (cek model/kunci/URL)');
+      return out;
+    }
+
+    // Dispatch terjemahan online. Mode auto tanpa kunci LLM → MyMemory.
+    async function translateOnline(text, explain) {
+      const id = config.translationProvider || 'mymemory';
+      if (id === 'gemini') return { text: await translateViaGemini(text, explain), via: 'Gemini' };
+      if (id === 'openai') {
+        if (!translationHasKey()) throw new Error('Kunci API belum diisi (Pengaturan → Terjemahan)');
+        return { text: await translateViaOpenAI(text, explain), via: 'OpenAI-compatible' };
+      }
+      return { text: await translateViaMyMemory(text), via: 'MyMemory' };
     }
 
     async function translateText(text) {
@@ -5334,54 +5714,101 @@
       el.transResultText.classList.add('hidden');
       el.transResultText.textContent = '';
 
-      // Fase 2b: cache offline dulu — hemat kuota & tetap berguna tanpa internet.
+      // Fase 2b: cache dulu — hemat kuota & tetap berguna tanpa internet.
       const cacheKey = transHash(text.slice(0, 500));
       try {
         const cache = transCacheLoad();
         if (cache[cacheKey] && cache[cacheKey].id) {
           el.transLoading.classList.add('hidden');
           el.transResultText.classList.remove('hidden');
-          el.transResultText.innerHTML = `${escapeHtml(cache[cacheKey].id)}<div class="text-[10px] opacity-50 mt-1">(tersimpan offline — dari terjemahan online sebelumnya)</div>`;
+          const viaNote = cache[cacheKey].via ? ` · via ${escapeHtml(cache[cacheKey].via)}` : '';
+          el.transResultText.innerHTML = `${escapeHtml(cache[cacheKey].id)}<div class="text-[10px] opacity-50 mt-1">(tersimpan — dari terjemahan online sebelumnya${viaNote})</div>`;
+          setTransSourceLabel('Cache' + (cache[cacheKey].via ? ' · ' + cache[cacheKey].via : ''));
+          syncExplainSection();
           return;
         }
       } catch (e) {}
 
-      try {
-        const transProtocol = 'https:';
-        const transDomain = 'api.mymemory.translated.net';
-        const targetLang = 'id';
-        const queryUrl = `${transProtocol}//${transDomain}/get?q=${encodeURIComponent(text.slice(0, 500))}&langpair=ja|${targetLang}`;
-
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 6500);
-        const resp = await fetch(queryUrl, { signal: controller.signal });
-        clearTimeout(timeout);
-
-        if (resp.ok) {
-          const data = await resp.json();
-          const resText = data && data.responseData && data.responseData.translatedText;
-          if (resText && !resText.includes('MYMEMORY WARNING')) {
-            try {
-              const cache = transCacheLoad();
-              cache[cacheKey] = { id: resText, ts: Date.now() };
-              transCacheSave(cache);
-            } catch (e) {}
-            el.transResultText.textContent = resText;
+      // Tahap 4 dual-mode: auto = online dulu, gagal → offline diam-diam.
+      const mode = config.translationMode || 'auto';
+      if (mode !== 'offline') {
+        setTransSourceLabel('Online…');
+        try {
+          const out = await translateOnline(text, false);
+          try {
+            const cache = transCacheLoad();
+            cache[cacheKey] = { id: out.text, ts: Date.now(), via: out.via };
+            transCacheSave(cache);
+          } catch (e) {}
+          el.transResultText.textContent = out.text;
+          el.transLoading.classList.add('hidden');
+          el.transResultText.classList.remove('hidden');
+          setTransSourceLabel('Online via ' + out.via);
+          syncExplainSection();
+          return;
+        } catch (err) {
+          const msg = String((err && err.message) || err);
+          if (mode === 'online') {
             el.transLoading.classList.add('hidden');
             el.transResultText.classList.remove('hidden');
+            el.transResultText.innerHTML = `<span class="opacity-70 italic text-[11px]">Online gagal: ${escapeHtml(msg.slice(0, 140))}. Periksa kunci/model/koneksi, atau pakai mode Otomatis/Offline.</span>`;
+            setTransSourceLabel('Online gagal');
+            syncExplainSection();
             return;
           }
+          // mode auto → lanjut ke fondasi offline di bawah
         }
-        throw new Error('Gagal translate online');
-      } catch (err) {
-        el.transLoading.classList.add('hidden');
-        el.transResultText.classList.remove('hidden');
-        // Fase 2b: gagal online → rakit harfiah offline (bukan pesan buntu).
+      }
+      setTransSourceLabel('Offline');
+      el.transLoading.classList.add('hidden');
+      el.transResultText.classList.remove('hidden');
+      // Fondasi offline: rakit harfiah kata-per-kata (bukan pesan buntu).
+      try {
+        await renderLiteralBreakdown(text);
+      } catch (e) {
+        el.transResultText.innerHTML = `<span class="opacity-70 italic text-[11px]">Terjemahan tidak tersedia. Silakan lihat arti kosakata per kata di bawah.</span>`;
+      }
+      syncExplainSection();
+    }
+
+    // Tampilkan/sembunyikan seksi Jelaskan sesuai kesiapan LLM.
+    function syncExplainSection() {
+      if (!el.explainSection) return;
+      const show = translationLlmReady() && (config.translationMode || 'auto') !== 'offline';
+      el.explainSection.classList.toggle('hidden', !show);
+      if (show && window.lucide) lucide.createIcons();
+    }
+
+    async function explainText() {
+      const text = (currentSelectedText || '').trim();
+      if (!text) { showToast('Tidak ada teks untuk dijelaskan'); return; }
+      if (!translationLlmReady()) {
+        showToast('Isi dulu provider LLM + kunci di Pengaturan → Terjemahan');
+        return;
+      }
+      if ((config.translationMode || 'auto') === 'offline') {
+        showToast('Mode Offline aktif — Jelaskan butuh online');
+        return;
+      }
+      const ck = transExplainKey(text);
+      try {
+        const cache = transCacheLoad();
+        if (cache[ck] && cache[ck].id) {
+          el.explainResultText.textContent = cache[ck].id;
+          return;
+        }
+      } catch (e) {}
+      el.explainResultText.innerHTML = '<span class="opacity-60 italic">Menjelaskan dengan ' + escapeHtml(translationProviderLabel()) + '…</span>';
+      try {
+        const out = await translateOnline(text, true);
         try {
-          await renderLiteralBreakdown(text);
-        } catch (e) {
-          el.transResultText.innerHTML = `<span class="opacity-70 italic text-[11px]">Terjemahan tidak tersedia. Silakan lihat arti kosakata per kata di bawah.</span>`;
-        }
+          const cache = transCacheLoad();
+          cache[ck] = { id: out.text, ts: Date.now(), via: out.via };
+          transCacheSave(cache);
+        } catch (e) {}
+        el.explainResultText.textContent = out.text;
+      } catch (err) {
+        el.explainResultText.innerHTML = '<span class="opacity-70 italic">Gagal: ' + escapeHtml(String((err && err.message) || err).slice(0, 140)) + '</span>';
       }
     }
 
@@ -5423,14 +5850,17 @@
       }
 
       for (const tok of uniqueTokens) {
-        const info = await lookupWord(tok.s, tok.r, tok.b);
+        const info = await lookupWord(tok.s, tok.r, tok.b, tok);
         const entry = info.entry;
         const readingHiragana = info.kana;
-        const posLabel = info.posLabel || tok.p || '';
-        const meanings = (entry && entry.g && entry.g.join('; ')) || 'Arti belum tercatat di kamus offline';
+        const posLabel = info.isName ? 'Nama diri' : (info.posLabel || tok.p || '');
+        const meanings = (entry && entry.g && entry.g.join('; '))
+          || (info.isName ? '👤 Kemungkinan nama diri (orang/tempat) — ketuk chip kanji untuk bedah bacaan.' : 'Arti belum tercatat di kamus offline');
         const idLine = (info.idGloss && info.idGloss.id)
-          ? `<div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 leading-snug">🇮🇩 ${escapeHtml(info.idGloss.id)}</div>`
-          : '';
+          ? `<div class="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 leading-snug">🇮🇩 ${escapeHtml(info.idGloss.id)}${info.idGloss.src === 'wikikamus' ? ' <span class="font-normal opacity-60">· Wikikamus</span>' : ''}</div>`
+          : (info.bridgeId
+            ? `<div class="text-[11px] font-semibold text-amber-700 dark:text-amber-300 leading-snug">≈ ${escapeHtml(info.bridgeId)} <span class="font-normal opacity-60">· ~gloss</span></div>`
+            : '');
         const exLine = (info.idGloss && info.idGloss.ex_ja)
           ? `<div class="text-[10px] opacity-70 leading-snug font-mincho">例 ${escapeHtml(info.idGloss.ex_ja)} <span class="font-sans">— ${escapeHtml(info.idGloss.ex_id || '')}</span></div>`
           : '';
@@ -5729,6 +6159,11 @@
     el.btnActionShare.addEventListener('click', () => shareSelectedText(currentSelectedText));
 
     el.btnCloseTranslation.addEventListener('click', closeTranslationModal);
+    el.btnExplainText.addEventListener('click', explainText);
+    el.btnCopyExplain.addEventListener('click', () => {
+      const txt = el.explainResultText ? el.explainResultText.textContent : '';
+      if (txt) copySelectedText(txt);
+    });
     el.btnCopyOriginal.addEventListener('click', () => copySelectedText(currentSelectedText));
     el.btnCopyRomaji.addEventListener('click', () => {
       const txt = el.transRomajiText ? el.transRomajiText.textContent : '';
@@ -7078,7 +7513,7 @@
         orientation: 'vertical', font: 'font-mincho',
         fontSize: 18, lineHeight: 2.05, paraGap: 1.25, textAlign: 'justify',
         contentWidth: 'comfortable', brightness: 100, showHeader: true, showFooter: true,
-        pageAnim: true, wakeLock: false, verticalPaging: 'snap', showSpineShadow: true, rubyMode: 'pintar', showRomaji: true, showJlpt: true, markN5: true, mouseMode: 'drag'
+        pageAnim: true, wakeLock: false, verticalPaging: 'snap', showSpineShadow: true, rubyMode: 'pintar', showRomaji: true, showJlpt: true, markN5: true, translationMode: 'auto', translationProvider: 'mymemory', translationApiKey: '', translationModel: '', translationBaseUrl: '', mouseMode: 'drag'
       });
       applyTypography();
       showToast("Pengaturan telah di-reset");
@@ -7347,6 +7782,12 @@
           if (typeof config.showRomaji !== 'boolean') config.showRomaji = true;
           if (typeof config.showJlpt !== 'boolean') config.showJlpt = true;
           if (typeof config.markN5 !== 'boolean') config.markN5 = true;
+          // Migrasi Tahap 4 (dual-mode terjemahan): nilai default bila belum ada.
+          if (!['auto', 'offline', 'online'].includes(config.translationMode)) config.translationMode = 'auto';
+          if (!['mymemory', 'gemini', 'openai'].includes(config.translationProvider)) config.translationProvider = 'mymemory';
+          if (typeof config.translationApiKey !== 'string') config.translationApiKey = '';
+          if (typeof config.translationModel !== 'string') config.translationModel = '';
+          if (typeof config.translationBaseUrl !== 'string') config.translationBaseUrl = '';
           // Migrasi tema lama (theme/useCustomColors/customBg/customText)
           // ke model luar-dalam: readerTheme/libraryTheme/linkThemes + custom per permukaan.
           if (!parsed.readerTheme) {

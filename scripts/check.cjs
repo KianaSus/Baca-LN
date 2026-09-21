@@ -26,12 +26,15 @@ try {
   if (missing.length) fail('getElementById', 'hilang: ' + missing.join(', '));
   else ok('getElementById (' + used.size + ' id)');
 
-  // 3. Jaminan full-offline: tidak ada URL https:// di kode aplikasi.
+  // 3. Jaminan full-offline: tidak ada URL https:// di kode aplikasi,
+  // kecuali yang diizinkan eksplisit (Tahap 4: endpoint provider terjemahan
+  // online opt-in; URL kustom pengguna adalah input runtime, bukan literal).
   const remote = [...html.matchAll(/https:\/\/[^\s"'<>]+/g)].map(m => m[0]);
-  const allowed = remote.filter(u => u.includes('github.com') || u.includes('opencode'));
+  const allowHosts = ['github.com', 'opencode', 'generativelanguage.googleapis.com', 'api.openai.com'];
+  const allowed = remote.filter(u => allowHosts.some(h => u.includes(h)));
   const blocked = remote.filter(u => !allowed.includes(u));
   if (blocked.length) fail('offline', 'URL remote tersisa: ' + [...new Set(blocked)].slice(0, 5).join(', '));
-  else ok('offline (tanpa CDN)');
+  else ok('offline (tanpa CDN, +endpoint provider opt-in terdokumentasi)');
 
   // 4. Blok <style> harus seimbang kurawalnya.
   const style = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
@@ -54,7 +57,7 @@ try {
 });
 
 // 7. Data belajar N5 (Fase 0/1) harus valid.
-['vendor/jlpt-n5.json', 'vendor/id-gloss-n5.json', 'vendor/kana-map.json', 'vendor/kanji-n5.json'].forEach(f => {
+['vendor/jlpt-n5.json', 'vendor/id-gloss-n5.json', 'vendor/kana-map.json', 'vendor/kanji-n5.json', 'vendor/ja-id.json', 'vendor/en-id.json'].forEach(f => {
   try {
     const data = JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
     const n = Array.isArray(data) ? data.length : Object.keys(data).length;
@@ -62,6 +65,12 @@ try {
     else ok(`${f} (${n} entri)`);
   } catch (e) { fail(f, e.message.split('\n')[0]); }
 });
+// 7b. Kamus penuh Tahap 2 (bulk, boleh absen saat dev ringan — tapi wajib untuk APK).
+try {
+  const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'vendor/jmdict-full.json'), 'utf8'));
+  if (!Array.isArray(data) || data.length < 150000) fail('vendor/jmdict-full.json', 'entri kurang dari 150rb');
+  else ok(`vendor/jmdict-full.json (${data.length} entri)`);
+} catch (e) { fail('vendor/jmdict-full.json', e.message.split('\n')[0]); }
 try {
   const svgDir = path.join(ROOT, 'vendor', 'kanjivg-n5');
   const svgs = fs.readdirSync(svgDir).filter(f => f.endsWith('.svg'));

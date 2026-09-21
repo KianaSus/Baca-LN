@@ -1,0 +1,1202 @@
+[
+ {
+  "en": "japanese",
+  "n": 1929
+ },
+ {
+  "en": "person",
+  "n": 1796
+ },
+ {
+  "en": "japan",
+  "n": 1276
+ },
+ {
+  "en": "system",
+  "n": 1210
+ },
+ {
+  "en": "university",
+  "n": 1203
+ },
+ {
+  "en": "school",
+  "n": 1132
+ },
+ {
+  "en": "used",
+  "n": 1107
+ },
+ {
+  "en": "species",
+  "n": 1102
+ },
+ {
+  "en": "something",
+  "n": 1096
+ },
+ {
+  "en": "time",
+  "n": 1058
+ },
+ {
+  "en": "chinese",
+  "n": 1017
+ },
+ {
+  "en": "someone",
+  "n": 953
+ },
+ {
+  "en": "family",
+  "n": 950
+ },
+ {
+  "en": "period",
+  "n": 936
+ },
+ {
+  "en": "water",
+  "n": 906
+ },
+ {
+  "en": "day",
+  "n": 787
+ },
+ {
+  "en": "new",
+  "n": 784
+ },
+ {
+  "en": "rice",
+  "n": 768
+ },
+ {
+  "en": "game",
+  "n": 766
+ },
+ {
+  "en": "all",
+  "n": 749
+ },
+ {
+  "en": "book",
+  "n": 744
+ },
+ {
+  "en": "first",
+  "n": 726
+ },
+ {
+  "en": "small",
+  "n": 726
+ },
+ {
+  "en": "language",
+  "n": 719
+ },
+ {
+  "en": "film",
+  "n": 708
+ },
+ {
+  "en": "good",
+  "n": 696
+ },
+ {
+  "en": "line",
+  "n": 694
+ },
+ {
+  "en": "work",
+  "n": 687
+ },
+ {
+  "en": "people",
+  "n": 677
+ },
+ {
+  "en": "paper",
+  "n": 670
+ },
+ {
+  "en": "name",
+  "n": 639
+ },
+ {
+  "en": "food",
+  "n": 633
+ },
+ {
+  "en": "high",
+  "n": 630
+ },
+ {
+  "en": "national",
+  "n": 613
+ },
+ {
+  "en": "fish",
+  "n": 603
+ },
+ {
+  "en": "public",
+  "n": 600
+ },
+ {
+  "en": "china",
+  "n": 598
+ },
+ {
+  "en": "old",
+  "n": 589
+ },
+ {
+  "en": "life",
+  "n": 586
+ },
+ {
+  "en": "house",
+  "n": 584
+ },
+ {
+  "en": "light",
+  "n": 580
+ },
+ {
+  "en": "association",
+  "n": 572
+ },
+ {
+  "en": "number",
+  "n": 570
+ },
+ {
+  "en": "party",
+  "n": 561
+ },
+ {
+  "en": "character",
+  "n": 553
+ },
+ {
+  "en": "have",
+  "n": 549
+ },
+ {
+  "en": "group",
+  "n": 549
+ },
+ {
+  "en": "down",
+  "n": 547
+ },
+ {
+  "en": "you",
+  "n": 542
+ },
+ {
+  "en": "service",
+  "n": 542
+ },
+ {
+  "en": "company",
+  "n": 539
+ },
+ {
+  "en": "make",
+  "n": 531
+ },
+ {
+  "en": "place",
+  "n": 530
+ },
+ {
+  "en": "business",
+  "n": 528
+ },
+ {
+  "en": "do",
+  "n": 521
+ },
+ {
+  "en": "without",
+  "n": 521
+ },
+ {
+  "en": "body",
+  "n": 515
+ },
+ {
+  "en": "death",
+  "n": 511
+ },
+ {
+  "en": "year",
+  "n": 509
+ },
+ {
+  "en": "point",
+  "n": 508
+ },
+ {
+  "en": "area",
+  "n": 505
+ },
+ {
+  "en": "imperial",
+  "n": 503
+ },
+ {
+  "en": "go",
+  "n": 500
+ },
+ {
+  "en": "society",
+  "n": 498
+ },
+ {
+  "en": "man",
+  "n": 497
+ },
+ {
+  "en": "red",
+  "n": 496
+ },
+ {
+  "en": "power",
+  "n": 495
+ },
+ {
+  "en": "order",
+  "n": 494
+ },
+ {
+  "en": "back",
+  "n": 488
+ },
+ {
+  "en": "two",
+  "n": 486
+ },
+ {
+  "en": "end",
+  "n": 485
+ },
+ {
+  "en": "act",
+  "n": 485
+ },
+ {
+  "en": "money",
+  "n": 483
+ },
+ {
+  "en": "long",
+  "n": 479
+ },
+ {
+  "en": "great",
+  "n": 478
+ },
+ {
+  "en": "way",
+  "n": 475
+ },
+ {
+  "en": "head",
+  "n": 472
+ },
+ {
+  "en": "right",
+  "n": 470
+ },
+ {
+  "en": "oneself",
+  "n": 469
+ },
+ {
+  "en": "world",
+  "n": 467
+ },
+ {
+  "en": "child",
+  "n": 463
+ },
+ {
+  "en": "woman",
+  "n": 459
+ },
+ {
+  "en": "other",
+  "n": 459
+ },
+ {
+  "en": "home",
+  "n": 458
+ },
+ {
+  "en": "large",
+  "n": 454
+ },
+ {
+  "en": "state",
+  "n": 453
+ },
+ {
+  "en": "white",
+  "n": 450
+ },
+ {
+  "en": "hair",
+  "n": 448
+ },
+ {
+  "en": "type",
+  "n": 447
+ },
+ {
+  "en": "tree",
+  "n": 445
+ },
+ {
+  "en": "war",
+  "n": 444
+ },
+ {
+  "en": "government",
+  "n": 444
+ },
+ {
+  "en": "office",
+  "n": 441
+ },
+ {
+  "en": "room",
+  "n": 439
+ },
+ {
+  "en": "international",
+  "n": 438
+ },
+ {
+  "en": "made",
+  "n": 436
+ },
+ {
+  "en": "land",
+  "n": 436
+ },
+ {
+  "en": "fire",
+  "n": 435
+ },
+ {
+  "en": "style",
+  "n": 434
+ },
+ {
+  "en": "any",
+  "n": 433
+ },
+ {
+  "en": "control",
+  "n": 431
+ },
+ {
+  "en": "law",
+  "n": 430
+ },
+ {
+  "en": "air",
+  "n": 429
+ },
+ {
+  "en": "having",
+  "n": 429
+ },
+ {
+  "en": "art",
+  "n": 429
+ },
+ {
+  "en": "form",
+  "n": 422
+ },
+ {
+  "en": "edo",
+  "n": 418
+ },
+ {
+  "en": "acid",
+  "n": 413
+ },
+ {
+  "en": "kanji",
+  "n": 408
+ },
+ {
+  "en": "car",
+  "n": 406
+ },
+ {
+  "en": "very",
+  "n": 405
+ },
+ {
+  "en": "tea",
+  "n": 401
+ },
+ {
+  "en": "three",
+  "n": 401
+ },
+ {
+  "en": "sound",
+  "n": 396
+ },
+ {
+  "en": "take",
+  "n": 395
+ },
+ {
+  "en": "get",
+  "n": 395
+ },
+ {
+  "en": "military",
+  "n": 395
+ },
+ {
+  "en": "hand",
+  "n": 394
+ },
+ {
+  "en": "same",
+  "n": 393
+ },
+ {
+  "en": "information",
+  "n": 392
+ },
+ {
+  "en": "data",
+  "n": 391
+ },
+ {
+  "en": "music",
+  "n": 388
+ },
+ {
+  "en": "side",
+  "n": 386
+ },
+ {
+  "en": "era",
+  "n": 385
+ },
+ {
+  "en": "night",
+  "n": 380
+ },
+ {
+  "en": "month",
+  "n": 380
+ },
+ {
+  "en": "traditional",
+  "n": 378
+ },
+ {
+  "en": "special",
+  "n": 377
+ },
+ {
+  "en": "use",
+  "n": 376
+ },
+ {
+  "en": "plant",
+  "n": 375
+ },
+ {
+  "en": "common",
+  "n": 373
+ },
+ {
+  "en": "court",
+  "n": 371
+ },
+ {
+  "en": "college",
+  "n": 370
+ },
+ {
+  "en": "ancient",
+  "n": 368
+ },
+ {
+  "en": "buddhist",
+  "n": 366
+ },
+ {
+  "en": "face",
+  "n": 364
+ },
+ {
+  "en": "sea",
+  "n": 363
+ },
+ {
+  "en": "young",
+  "n": 362
+ },
+ {
+  "en": "th",
+  "n": 360
+ },
+ {
+  "en": "price",
+  "n": 359
+ },
+ {
+  "en": "institute",
+  "n": 359
+ },
+ {
+  "en": "black",
+  "n": 357
+ },
+ {
+  "en": "corporation",
+  "n": 356
+ },
+ {
+  "en": "shrine",
+  "n": 355
+ },
+ {
+  "en": "mountain",
+  "n": 354
+ },
+ {
+  "en": "oil",
+  "n": 354
+ },
+ {
+  "en": "second",
+  "n": 353
+ },
+ {
+  "en": "wind",
+  "n": 352
+ },
+ {
+  "en": "variety",
+  "n": 349
+ },
+ {
+  "en": "age",
+  "n": 349
+ },
+ {
+  "en": "set",
+  "n": 347
+ },
+ {
+  "en": "spring",
+  "n": 346
+ },
+ {
+  "en": "social",
+  "n": 345
+ },
+ {
+  "en": "around",
+  "n": 344
+ },
+ {
+  "en": "country",
+  "n": 344
+ },
+ {
+  "en": "word",
+  "n": 342
+ },
+ {
+  "en": "like",
+  "n": 341
+ },
+ {
+  "en": "part",
+  "n": 340
+ },
+ {
+  "en": "love",
+  "n": 339
+ },
+ {
+  "en": "genus",
+  "n": 337
+ },
+ {
+  "en": "ceremony",
+  "n": 336
+ },
+ {
+  "en": "video",
+  "n": 334
+ },
+ {
+  "en": "test",
+  "n": 333
+ },
+ {
+  "en": "color",
+  "n": 332
+ },
+ {
+  "en": "play",
+  "n": 331
+ },
+ {
+  "en": "open",
+  "n": 330
+ },
+ {
+  "en": "medicine",
+  "n": 330
+ },
+ {
+  "en": "temple",
+  "n": 329
+ },
+ {
+  "en": "horse",
+  "n": 329
+ },
+ {
+  "en": "building",
+  "n": 329
+ },
+ {
+  "en": "general",
+  "n": 326
+ },
+ {
+  "en": "unit",
+  "n": 325
+ },
+ {
+  "en": "writing",
+  "n": 325
+ },
+ {
+  "en": "become",
+  "n": 323
+ },
+ {
+  "en": "card",
+  "n": 323
+ },
+ {
+  "en": "short",
+  "n": 322
+ },
+ {
+  "en": "together",
+  "n": 321
+ },
+ {
+  "en": "class",
+  "n": 321
+ },
+ {
+  "en": "field",
+  "n": 319
+ },
+ {
+  "en": "each",
+  "n": 316
+ },
+ {
+  "en": "position",
+  "n": 315
+ },
+ {
+  "en": "abbr",
+  "n": 314
+ },
+ {
+  "en": "things",
+  "n": 313
+ },
+ {
+  "en": "tax",
+  "n": 313
+ },
+ {
+  "en": "city",
+  "n": 312
+ },
+ {
+  "en": "market",
+  "n": 306
+ },
+ {
+  "en": "going",
+  "n": 305
+ },
+ {
+  "en": "god",
+  "n": 305
+ },
+ {
+  "en": "machine",
+  "n": 305
+ },
+ {
+  "en": "main",
+  "n": 304
+ },
+ {
+  "en": "change",
+  "n": 302
+ },
+ {
+  "en": "look",
+  "n": 302
+ },
+ {
+  "en": "official",
+  "n": 302
+ },
+ {
+  "en": "police",
+  "n": 301
+ },
+ {
+  "en": "sword",
+  "n": 301
+ },
+ {
+  "en": "green",
+  "n": 299
+ },
+ {
+  "en": "another",
+  "n": 299
+ },
+ {
+  "en": "disease",
+  "n": 299
+ },
+ {
+  "en": "health",
+  "n": 299
+ },
+ {
+  "en": "left",
+  "n": 298
+ },
+ {
+  "en": "cold",
+  "n": 298
+ },
+ {
+  "en": "medical",
+  "n": 298
+ },
+ {
+  "en": "former",
+  "n": 297
+ },
+ {
+  "en": "bank",
+  "n": 297
+ },
+ {
+  "en": "rate",
+  "n": 296
+ },
+ {
+  "en": "tokyo",
+  "n": 296
+ },
+ {
+  "en": "female",
+  "n": 295
+ },
+ {
+  "en": "political",
+  "n": 290
+ },
+ {
+  "en": "radical",
+  "n": 290
+ },
+ {
+  "en": "space",
+  "n": 289
+ },
+ {
+  "en": "private",
+  "n": 289
+ },
+ {
+  "en": "emperor",
+  "n": 287
+ },
+ {
+  "en": "science",
+  "n": 286
+ },
+ {
+  "en": "goods",
+  "n": 283
+ },
+ {
+  "en": "ship",
+  "n": 283
+ },
+ {
+  "en": "train",
+  "n": 280
+ },
+ {
+  "en": "last",
+  "n": 279
+ },
+ {
+  "en": "own",
+  "n": 279
+ },
+ {
+  "en": "wine",
+  "n": 278
+ },
+ {
+  "en": "taking",
+  "n": 278
+ },
+ {
+  "en": "crime",
+  "n": 278
+ },
+ {
+  "en": "store",
+  "n": 277
+ },
+ {
+  "en": "method",
+  "n": 277
+ },
+ {
+  "en": "stone",
+  "n": 276
+ },
+ {
+  "en": "organization",
+  "n": 274
+ },
+ {
+  "en": "full",
+  "n": 274
+ },
+ {
+  "en": "stock",
+  "n": 274
+ },
+ {
+  "en": "making",
+  "n": 273
+ },
+ {
+  "en": "management",
+  "n": 273
+ },
+ {
+  "en": "animal",
+  "n": 272
+ },
+ {
+  "en": "has",
+  "n": 272
+ },
+ {
+  "en": "top",
+  "n": 272
+ },
+ {
+  "en": "research",
+  "n": 271
+ },
+ {
+  "en": "theory",
+  "n": 271
+ },
+ {
+  "en": "box",
+  "n": 271
+ },
+ {
+  "en": "letter",
+  "n": 270
+ },
+ {
+  "en": "meat",
+  "n": 270
+ },
+ {
+  "en": "local",
+  "n": 269
+ },
+ {
+  "en": "hot",
+  "n": 268
+ },
+ {
+  "en": "hard",
+  "n": 268
+ },
+ {
+  "en": "file",
+  "n": 267
+ },
+ {
+  "en": "away",
+  "n": 266
+ },
+ {
+  "en": "force",
+  "n": 266
+ },
+ {
+  "en": "prefecture",
+  "n": 265
+ },
+ {
+  "en": "front",
+  "n": 265
+ },
+ {
+  "en": "snow",
+  "n": 263
+ },
+ {
+  "en": "low",
+  "n": 263
+ },
+ {
+  "en": "more",
+  "n": 262
+ },
+ {
+  "en": "station",
+  "n": 260
+ },
+ {
+  "en": "blood",
+  "n": 259
+ },
+ {
+  "en": "road",
+  "n": 259
+ },
+ {
+  "en": "clothes",
+  "n": 258
+ },
+ {
+  "en": "bamboo",
+  "n": 258
+ },
+ {
+  "en": "program",
+  "n": 257
+ },
+ {
+  "en": "foreign",
+  "n": 256
+ },
+ {
+  "en": "free",
+  "n": 256
+ },
+ {
+  "en": "cell",
+  "n": 256
+ },
+ {
+  "en": "many",
+  "n": 255
+ },
+ {
+  "en": "device",
+  "n": 255
+ },
+ {
+  "en": "network",
+  "n": 255
+ },
+ {
+  "en": "bad",
+  "n": 254
+ },
+ {
+  "en": "early",
+  "n": 254
+ },
+ {
+  "en": "technology",
+  "n": 254
+ },
+ {
+  "en": "clothing",
+  "n": 253
+ },
+ {
+  "en": "only",
+  "n": 253
+ },
+ {
+  "en": "education",
+  "n": 253
+ },
+ {
+  "en": "industry",
+  "n": 253
+ },
+ {
+  "en": "voice",
+  "n": 252
+ },
+ {
+  "en": "plan",
+  "n": 252
+ },
+ {
+  "en": "dog",
+  "n": 251
+ },
+ {
+  "en": "put",
+  "n": 251
+ },
+ {
+  "en": "words",
+  "n": 251
+ },
+ {
+  "en": "table",
+  "n": 250
+ },
+ {
+  "en": "eyes",
+  "n": 250
+ },
+ {
+  "en": "computer",
+  "n": 250
+ },
+ {
+  "en": "sake",
+  "n": 249
+ },
+ {
+  "en": "sexual",
+  "n": 249
+ },
+ {
+  "en": "come",
+  "n": 247
+ },
+ {
+  "en": "natural",
+  "n": 247
+ },
+ {
+  "en": "their",
+  "n": 247
+ },
+ {
+  "en": "doing",
+  "n": 246
+ },
+ {
+  "en": "spirit",
+  "n": 246
+ },
+ {
+  "en": "ball",
+  "n": 245
+ },
+ {
+  "en": "product",
+  "n": 245
+ },
+ {
+  "en": "online",
+  "n": 245
+ },
+ {
+  "en": "where",
+  "n": 243
+ },
+ {
+  "en": "center",
+  "n": 243
+ },
+ {
+  "en": "western",
+  "n": 243
+ },
+ {
+  "en": "cut",
+  "n": 242
+ },
+ {
+  "en": "board",
+  "n": 242
+ },
+ {
+  "en": "human",
+  "n": 242
+ },
+ {
+  "en": "series",
+  "n": 242
+ },
+ {
+  "en": "ground",
+  "n": 240
+ },
+ {
+  "en": "blue",
+  "n": 240
+ },
+ {
+  "en": "shop",
+  "n": 240
+ },
+ {
+  "en": "base",
+  "n": 240
+ },
+ {
+  "en": "buddha",
+  "n": 240
+ },
+ {
+  "en": "living",
+  "n": 239
+ },
+ {
+  "en": "song",
+  "n": 236
+ },
+ {
+  "en": "reading",
+  "n": 236
+ }
+]

@@ -20,6 +20,11 @@ const TMP = path.join(os.tmpdir(), 'kokoro-dict');
 const JMDICT_URL = 'http://ftp.edrdg.org/pub/Nihongo//JMdict.gz';
 const KANJIDIC_URL = 'http://www.edrdg.org/kanjidic/kanjidic2.xml.gz';
 
+// Mode --full: simpan SEMUA entri (tanpa filter prioritas) ke vendor/jmdict-full.json.
+// Dipakai Tahap 2 (cakupan kata umum + nama): node scripts/build-dict.cjs --full
+// Default (tanpa flag): perilaku lama — hanya entri umum -> vendor/jmdict-compact.json.
+const FULL = process.argv.includes('--full');
+
 const PRI_MARKERS = new Set(['news1', 'news2', 'ichi1', 'ichi2', 'spec1', 'spec2', 'gai1']);
 const NF_RE = /^nf\d\d$/;
 
@@ -137,7 +142,7 @@ function buildJMdict(xml) {
     else if (name === 'r_ele') inREle = false;
     else if (name === 'sense' && entry && sense) { entry.senses.push(sense); sense = null; }
     else if (name === 'entry' && entry) {
-      if ((entry.kePri || entry.rePri) && (entry.keb.length || entry.reb.length)) {
+      if ((FULL || entry.kePri || entry.rePri) && (entry.keb.length || entry.reb.length)) {
         const senses = entry.senses.filter(s => s.gloss.length).slice(0, 3);
         if (senses.length) {
           const pos = [...new Set(senses.flatMap(s => s.pos))].slice(0, 4);
@@ -211,11 +216,14 @@ function main() {
   const entries = buildJMdict(jmXml);
   console.log(`JMdict: ${entries.length} entri umum (${((Date.now() - t0) / 1000).toFixed(1)}s)`);
   jmXml = null;
-  const jmPath = path.join(VENDOR, 'jmdict-compact.json');
+  const jmPath = FULL
+    ? path.join(VENDOR, 'jmdict-full.json')
+    : path.join(VENDOR, 'jmdict-compact.json');
   fs.writeFileSync(jmPath, JSON.stringify(entries));
   console.log(`tulis ${path.basename(jmPath)} (${(fs.statSync(jmPath).size / 1048576).toFixed(1)} MB)`);
 
-  // ---- KANJIDIC2 ----
+  // ---- KANJIDIC2 (dilewati pada mode --full: tidak berubah) ----
+  if (!FULL) {
   const k2Gz = path.join(TMP, 'kanjidic2.xml.gz');
   download(KANJIDIC_URL, k2Gz);
   let k2Xml = gunzipToString(k2Gz);
@@ -226,6 +234,7 @@ function main() {
   const k2Path = path.join(VENDOR, 'kanjidic-compact.json');
   fs.writeFileSync(k2Path, JSON.stringify(kanji));
   console.log(`KANJIDIC2: ${Object.keys(kanji).length} kanji -> ${path.basename(k2Path)} (${(fs.statSync(k2Path).size / 1024).toFixed(0)} KB)`);
+  } // endif !FULL
 
   // ---- Aturan & label (sumber, masuk git) ----
   fs.copyFileSync(path.join(ROOT, 'scripts', 'deinflect-rules.json'), path.join(VENDOR, 'deinflect.json'));

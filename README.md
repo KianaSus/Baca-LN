@@ -5,13 +5,15 @@
 <h1 align="center">心 Kokoro — Light Novel & EPUB Reader</h1>
 
 <p align="center">
-  <strong>Pustaka & Pembaca Light Novel / EPUB Offline-First bergaya Play Books & Kindle dengan Tategaki Vertikal Jepang (縦書き), Kamus Cepat Tap-to-Lookup, dan Sistem Review Kosakata SRS.</strong>
+  <strong>Pustaka & Pembaca Light Novel / EPUB Offline-First bergaya Play Books & Kindle dengan Tategaki Vertikal Jepang (縦書き), Kamus Cepat Tap-to-Lookup Multi-Tier, dan Asisten Belajar AI & SRS.</strong>
 </p>
 
 <p align="center">
   <a href="https://github.com/KianaSus/Baca-LN"><img src="https://img.shields.io/badge/version-2.0.0-e07a5f?style=flat-square" alt="Version 2.0.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3d5a80?style=flat-square" alt="License MIT"></a>
   <img src="https://img.shields.io/badge/offline--first-100%25%20CDN--Free-2a9d8f?style=flat-square" alt="Offline First">
+  <img src="https://img.shields.io/badge/dictionary-%F0%9F%87%AE%F0%9F%87%A9%20N5%20%2B%20Wikikamus%20%2B%20JMdict-informational?style=flat-square" alt="Kamus Multi-Tier">
+  <img src="https://img.shields.io/badge/AI%20Translate-Gemini%20%E2%80%A2%20OpenAI%20%E2%80%A2%20MyMemory-7209b7?style=flat-square" alt="AI Translate">
   <img src="https://img.shields.io/badge/format-EPUB%20%E2%80%A2%20Tategaki-ee9b00?style=flat-square" alt="Format EPUB & Tategaki">
   <img src="https://img.shields.io/badge/SRS-SM--2%20Algorithm-9b5de5?style=flat-square" alt="SRS SM-2">
   <img src="https://img.shields.io/badge/platform-Web%20%E2%80%A2%20Android%20%E2%80%A2%20Desktop-005f73?style=flat-square" alt="Platforms">
@@ -32,9 +34,9 @@
 
 ##  Tentang Kokoro
 
-**Kokoro (心)** dirancang khusus bagi pecinta Light Novel dan pembelajar bahasa Jepang yang menginginkan pengalaman membaca buku fisik (*Bunkobon*) langsung di perangkat digital mereka. 
+**Kokoro (心)** dirancang khusus bagi pecinta Light Novel dan pembelajar bahasa Jepang yang mendambakan pengalaman membaca buku fisik (*Bunkobon*) langsung di perangkat digital mereka. 
 
-Tanpa ketergantungan server atau CDN luar, **Kokoro bekerja 100% offline**: mulai dari rendering teks vertikal otentik (*tategaki*), ekstraksi sampul otomatis, kamus interaktif sekali ketuk, kartu kanji, hingga sistem kuis pengulangan berjarak (Spaced Repetition System / SRS) yang terintegrasi langsung dengan kalimat novel yang sedang Anda baca.
+Aplikasi ini beroperasi **100% offline-first** tanpa ketergantungan CDN atau server luar: mulai dari rendering teks vertikal otentik (*tategaki*), ekstraksi sampul otomatis, kamus berlapis bahasa Indonesia sekali ketuk, deteksi kata majemuk & nama diri, kartu kanji, hingga sistem kuis pengulangan berjarak (SRS) yang terintegrasi langsung dengan novel Anda. Untuk pemahaman mendalam, tersedia pula opsi asisten terjemahan & bedah nuansa kalimat bertenaga AI (Gemini / OpenAI).
 
 ---
 
@@ -55,7 +57,7 @@ Tanpa ketergantungan server atau CDN luar, **Kokoro bekerja 100% offline**: mula
       <td align="center" valign="top">
         <img src="docs/assets/reader-lookup.jpg" alt="Tampilan Reader Tategaki dan Kamus" width="360" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
         <br><br>
-        <em>Format vertikal Jepang (縦書き) dengan furigana, popup kamus instan (arti ID/EN, romaji, kanji breakdown, audio TTS), dan simpan kosakata.</em>
+        <em>Format vertikal Jepang (縦書き) dengan furigana, popup kamus instan (arti ID/EN berlapis, romaji, bedah kanji, audio TTS), dan simpan kosakata.</em>
       </td>
     </tr>
   </table>
@@ -74,14 +76,31 @@ Tanpa ketergantungan server atau CDN luar, **Kokoro bekerja 100% offline**: mula
 - **Tate-Chu-Yoko Otomatis:** Angka 2 digit dan tanda baca otomatis diformat tegak horizontal di dalam kolom vertikal.
 - **Dukungan Ilustrasi Penuh:** Ilustrasi light novel disajikan anggun sebagai halaman tersendiri atau galeri lightbox sekali sentuh.
 
-### 🔍 2. Kamus Cepat Tap-to-Lookup (Immersion Reading)
+### 🔍 2. Kamus Cepat Tap-to-Lookup Multi-Tier (Immersion Reading)
 - **Sekali Ketuk:** Aktifkan **Mode Kamus**, lalu ketuk kata apa saja di halaman buku untuk menampilkan popover kamus tanpa memutus alur membaca.
-- **Informasi Kata Komprehensif:** Menampilkan kana, romaji, arti bahasa Indonesia & Inggris, kelas kata (*Part of Speech*), dan badge level JLPT (misal **N5**).
+- **🇮🇩 Arti Indonesia Berlapis:** Tiap kata dicari bertingkat secara cerdas:
+  1. **🇮🇩 Kurasi N5:** Definisi terkurasi presisi untuk pembelajar tingkat dasar.
+  2. **🇮🇩 Wikikamus Indonesia:** Entri definisi bahasa Indonesia dari Wikikamus (`vendor/ja-id.json`).
+  3. **≈ Jembatan ~Gloss ID:** Terjemahan leksikal kata frekuensi tinggi (`vendor/en-id.json`) yang dilabeli transparan.
+  4. **🇬🇧 JMdict Lengkap:** Database komprehensif hingga 218.000+ entri bahasa Jepang-Inggris.
+- **🧩 Deteksi Kata Majemuk (Compound Words):** Ketuk bagian mana saja dari kata majemuk (misalnya: `実行委員会`), Kokoro otomatis mencocokkan bentuk gabungan terpanjang terlebih dahulu.
+- **👤 Deteksi Nama Karakter / Tempat (Nama Diri):** Token nama (seperti `比企谷` / `雪ノ下`) otomatis ditandai sebagai 👤 *“Kemungkinan nama diri”* lengkap dengan bacaan romaji & kanji breakdown tanpa membebani ukuran aplikasi.
 - **Bedah Kanji & Konjugasi:** Menampilkan akar kata dari bentuk konjugasi (misal: `よむ` dari bentuk `～て`) serta bedah arti kanji per karakter.
 - **Audio Pelafalan Asli (TTS):** Dengarkan pelafalan kata dengan tombol 🔊 normal dan 🐢 kecepatan santai (0.6x).
-- **Bedah Kalimat & Terjemahan:** Pahami struktur kalimat lengkap kata per kata, dilengkapi transkripsi rōmaji otomatis dan terjemahan offline/online.
 
-### 🧠 3. Spaced Repetition System (SRS) & Kosakata Terintegrasi
+### 🤖 3. Penerjemah Kalimat & Asisten AI (✨ Fitur Jelaskan)
+- **Mode Fleksibel:**
+  - *Otomatis (Default):* Menggunakan provider online jika terhubung internet, dan otomatis beralih ke rakitan offline jika tanpa koneksi.
+  - *Murni Offline:* Merakit arti harfiah kata-per-kata sesuai urutan kalimat Jepang asli.
+  - *Online:* Memastikan hasil terjemahan kalimat yang alami.
+- **Multi-Provider Pilihan:**
+  - **MyMemory:** Bawaan gratis, siap pakai tanpa API key.
+  - **Google Gemini:** Terjemahan cerdas berbasis konteks (masukkan API key Anda di Pengaturan).
+  - **OpenAI-Compatible:** Dukungan penuh untuk model OpenAI, OpenRouter, DeepSeek, maupun Local LLM (Ollama) dengan custom Base URL & API Key.
+- **✨ Fitur Jelaskan (AI Nuance & Grammar Breakdown):** Tombol *Jelaskan* memanggil LLM untuk membedah nuansa emosional/sastra, idiom tersirat, dan struktur tata bahasa kalimat langsung dalam bahasa Indonesia.
+- **Hemat Token & Privasi Terjaga:** Seluruh hasil terjemahan dan penjelasan di-cache di perangkat (tidak membuang kuota API jika dibuka berulang). Kunci API tersimpan eksklusif di `localStorage` lokal dan tidak pernah disertakan ke dalam berkas cadangan pustaka.
+
+### 🧠 4. Spaced Repetition System (SRS) & Kosakata Terintegrasi
 - **Konteks Nyata Buku:** Setiap kata yang disimpan otomatis menyertakan **1 kalimat utuh** dari light novel yang sedang Anda baca!
 - **Kuis Harian 4 Mode:**
   1. *Jepang ➔ Arti* (Memahami makna)
@@ -92,12 +111,12 @@ Tanpa ketergantungan server atau CDN luar, **Kokoro bekerja 100% offline**: mula
 - **Gamifikasi:** Pertahankan **Streak Harian 🔥** dan kumpulkan **XP ✨** setiap kali menyelesaikan sesi review harian.
 - **Ekspor ke Anki:** Ekspor seluruh kosakata Anda ke format TSV siap pakai untuk Anki (lengkap dengan kalimat konteks, romaji, JLPT, dan tingkat penguasaan).
 
-### 🎨 4. Estetika Bunkobon & Tema Kertas Tradisional
+### 🎨 5. Estetika Bunkobon & Tema Kertas Tradisional
 - **5 Preset Kertas Klasik:** *Bunkobon* (kertas novel hangat), *Washi Murni* (tekstur lembut), *Amber* (nyaman di mata), *Sakura Pink* (lembut), dan *OLED Black* (hemat daya).
 - **Kustomisasi Luas:** Atur tema isi dan antarmuka luar secara terpisah, ubah jenis font lokal, ukuran teks, jarak antar baris/kolom, hingga animasi pembalikan halaman (Snap / Mulus).
 
-### 📴 5. 100% Offline-First & Privasi Terjamin
-- **Nol CDN & Server:** Semua pustaka (Tailwind, JSZip, Lucide, Font WOFF2, Kamus N5) tersimpan lokal di dalam folder `vendor/`.
+### 📴 6. 100% Offline-First & Privasi Terjamin
+- **Nol CDN & Server Luar:** Semua pustaka (Tailwind, JSZip, Lucide, Font WOFF2, Kamus N5, Wikikamus JA-ID, Jembatan EN-ID) tersimpan lokal di dalam folder `vendor/`.
 - **Penyimpanan Lokal:** File buku, riwayat, dan bookmark tersimpan aman di IndexedDB perangkat Anda.
 - **Backup & Restore Fleksibel:** Cadangkan seluruh data Anda dalam file JSON atau ekspor kembali file `.epub` kapan saja.
 
@@ -180,18 +199,28 @@ npm run tauri:dev
 ```
 LN_Reader/
 ├── index.html              # Aplikasi utama (HTML, CSS, dan logika mandiri)
-├── vendor/                 # Pustaka lokal: Tailwind, JSZip, Lucide, fonts, kamus N5
+├── vendor/                 # Pustaka lokal & database kamus
 │   ├── jlpt-n5.json        # Database kamus N5
-│   ├── id-gloss-n5.json    # Terjemahan gloss bahasa Indonesia
+│   ├── id-gloss-n5.json    # Terjemahan gloss bahasa Indonesia (N5)
+│   ├── ja-id.json          # Kamus Jepang-Indonesia (Wikikamus)
+│   ├── en-id.json          # Jembatan leksikal Inggris-Indonesia
+│   ├── jmdict-full.json    # Kamus JMdict lengkap (opsional/dibangun)
 │   ├── kana-map.json       # Pemetaan hiragana/katakana & rōmaji
 │   └── kanjivg-n5/         # Stroke SVG kanji N5
 ├── docs/                   # Dokumentasi teknis & aset
 │   ├── assets/             # Banner visual & tangkapan layar
 │   ├── FITUR.md            # Direktori posisi tiap tombol & fitur
 │   ├── ARSITEKTUR.md       # Pemetaan fungsi kode & database
+│   ├── ATRIBUSI-DATA.md    # Lisensi & sumber data kamus
 │   └── BUILD.md            # Panduan build APK & Desktop
 ├── assets/ & icons/        # Aset ikon resolusi tinggi & vektor
-├── scripts/                # Script pengujian, build dist, dan generator ikon
+├── scripts/                # Script pengujian, build kamus, dan dist
+│   ├── check.cjs           # Uji kepatuhan offline & sintaks
+│   ├── verify-ja-id.cjs    # Verifikasi integritas kamus JA-ID
+│   ├── verify-en-id.cjs    # Verifikasi integritas jembatan EN-ID
+│   ├── build-dict.cjs      # Builder kamus JMdict (ringkas / full)
+│   ├── build-ja-id.cjs     # Crawler/builder Wikikamus JA-ID
+│   └── copy-dist.cjs       # Bundler folder dist untuk native APK
 ├── manifest.webmanifest    # Konfigurasi Progressive Web App (PWA)
 ├── sw.js                   # Service Worker untuk offline caching
 └── capacitor.config.json   # Konfigurasi pembungkus Android Capacitor
@@ -199,14 +228,24 @@ LN_Reader/
 
 ---
 
-## 🛠️ Uji Kualitas Kode
+## 🛠️ Uji Kualitas & Manajemen Kamus
 
-Jalankan skrip pemeriksaan kesehatan proyek untuk memastikan tidak ada ID yang bentrok, sintaks bersih, dan dependensi offline lengkap:
+Jalankan rangkaian tes untuk memastikan kode bersih, tidak ada ID yang hilang, dan integritas data kamus terjaga:
 
 ```powershell
+# 1. Pemeriksaan kesehatan umum (offline, sintaks, ID HTML)
 npm run check
-# atau secara manual:
-node scripts/check.cjs
+
+# 2. Uji fungsi dan logika SRS & kamus
+npm run smoke
+
+# 3. Verifikasi integritas kamus
+npm run verify:n5
+npm run verify:ja-id
+npm run verify:en-id
+
+# 4. (Opsional) Membangun database JMdict lengkap untuk APK
+npm run build:dict:full
 ```
 
 ---
@@ -220,7 +259,12 @@ Semua buku, sampul, posisi baca, dan catatan kosakata disimpan secara lokal di d
 
 <details>
 <summary><strong>Apakah saya membutuhkan koneksi internet untuk membaca?</strong></summary>
-Tidak. Kokoro berarsitektur <em>Offline-First</em>. Seluruh font, ikon, pengurai EPUB, serta data kamus JLPT N5 disimpan secara internal di folder <code>vendor/</code>. Koneksi internet hanya dibutuhkan jika Anda ingin menggunakan terjemahan mesin eksternal untuk kalimat yang belum tercatat di cache.
+Tidak. Kokoro berarsitektur <em>Offline-First</em>. Seluruh font, ikon, pengurai EPUB, serta data kamus (N5, Wikikamus JA-ID, EN-ID, JMdict) tersimpan internal di folder <code>vendor/</code>. Koneksi internet hanya dibutuhkan jika Anda memilih menggunakan terjemahan online atau asisten AI LLM.
+</details>
+
+<details>
+<summary><strong>Apakah aman memasukkan API Key Gemini / OpenAI di Kokoro?</strong></summary>
+Sangat aman. API key Anda disimpan <strong>hanya di <code>localStorage</code> perangkat</strong> Anda sendiri dengan input bertipe password. API key <em>tidak akan pernah</em> disertakan ke dalam file JSON cadangan pustaka saat Anda mengekspor data.
 </details>
 
 <details>
@@ -230,21 +274,31 @@ Gunakan fitur cadangkan! Di halaman utama pustaka, buka menu <code>⋮ (Lainnya)
 
 <details>
 <summary><strong>Apakah aplikasi ini mendukung format selain EPUB?</strong></summary>
-Saat ini Kokoro berfokus memberikan pengalaman terbaik untuk format <code>.epub</code> (standar format light novel Jepang digital). File EPUB dapat langsung diimpor sekaligus banyak (multi-file) atau cukup di-drag & drop ke halaman.
+Saat ini Kokoro berfokus memberikan pengalaman terbaik untuk format <code>.epub</code> (standar format light novel digital). File EPUB dapat langsung diimpor sekaligus banyak (multi-file) atau cukup di-drag & drop ke halaman.
 </details>
 
 ---
 
 ## 🌐 English Summary
 
-**Kokoro (心)** is an elegant, offline-first Light Novel & EPUB reader and Japanese immersion tool inspired by Google Play Books and Amazon Kindle.
+**Kokoro (心)** is an elegant, offline-first Light Novel & EPUB reader and Japanese immersion companion inspired by Google Play Books and Amazon Kindle.
 
 ### Key Highlights:
-- **True Tategaki (縦書き):** Read vertical Japanese text from right to left (RTL) with smart ruby/furigana control, automatic tate-chu-yoko for numbers, and full-bleed illustration support.
-- **Instant Tap-to-Lookup:** Tap any Japanese word to pop up its kana, rōmaji, English & Indonesian meanings, part of speech, deconjugation notes, and Text-to-Speech audio pronunciation.
-- **Spaced Repetition System (SRS):** Save vocabulary accompanied by real 1-sentence context directly from the light novel. Review words daily using an SM-2 spaced repetition algorithm with 4 interactive quiz types, daily streaks, XP, and Anki TSV export.
-- **Classic Paper & Bunkobon Aesthetics:** Choose from 5 traditional paper presets (Bunkobon, Washi, Amber, Sakura, OLED) or customize your own palette.
-- **100% Offline & Private:** Zero CDN dependencies. IndexedDB local storage ensures books and vocabulary remain completely on-device.
+- **Authentic Tategaki (縦書き):** Read vertical Japanese text from right to left (RTL) with smart ruby/furigana control, automatic tate-chu-yoko for numbers, and full-bleed illustration support.
+- **Multi-Tier Tap-to-Lookup:** Tap any Japanese word to inspect definitions via a prioritized tiered pipeline:
+  1. *Curated N5 Indonesian*
+  2. *Indonesian Wiktionary entries (`vendor/ja-id.json`)*
+  3. *English-Indonesian lexical bridge (`vendor/en-id.json`)*
+  4. *Complete English JMdict (up to 218k+ entries)*
+- **Smart Compound & Name Recognition:** Automatically identifies longest-match compound phrases (e.g. `実行委員会`) and character/place names (`名詞+固有名詞`, e.g. `比企谷`) without inflating app size.
+- **AI Sentence Translation & ✨ Explanations:**
+  - Online / Offline modes (literal grammar-ordered reconstruction when offline).
+  - Providers: MyMemory (free, zero-config), Google Gemini, or any OpenAI-compatible API (OpenRouter, DeepSeek, Local Ollama).
+  - *✨ Explain Feature:* Ask AI to dissect sentence nuance, subtext, and grammatical rules in Indonesian.
+  - On-device caching and private API key storage in `localStorage`.
+- **Spaced Repetition System (SRS):** Save words with real 1-sentence context directly from the chapter you are reading. Review daily using the SM-2 algorithm with 4 quiz modes, daily streaks, XP, and Anki TSV export.
+- **Traditional Bunkobon Aesthetics:** Choose from 5 classic paper presets (Bunkobon, Pure Washi, Amber, Sakura Pink, OLED Black) or customize your own theme.
+- **100% Offline & Private:** Zero CDN dependencies. Books, progress, and vocabulary are stored locally in IndexedDB.
 - **Cross-Platform:** Runs seamlessly as a standalone browser app, installable PWA, native Android APK (via Capacitor), or Desktop application (via Electron/Tauri).
 
 For technical details and contribution guidelines, see [docs/ARSITEKTUR.md](docs/ARSITEKTUR.md) and [CONTRIBUTING.md](CONTRIBUTING.md).

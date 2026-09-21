@@ -13,3 +13,15 @@ kecil. Meski begitu, harap laporkan secara bertanggung jawab:
 Catatan untuk kontributor: semua HTML dari EPUB dianggap tidak tepercaya —
 jangan menambahkan `innerHTML` dari sumber luar tanpa sanitasi, dan jangan
 memuat skrip/URL remote apa pun (aturan offline di `npm run check`).
+
+## Kunci API terjemahan (Tahap 4, opt-in)
+
+- Kunci API (Gemini / OpenAI-compatible) disimpan **hanya di `localStorage`
+  perangkat** (`kokoro_reader_config`), input bertipe password, dan **tidak
+  ikut backup/pulihkan pustaka** (backup hanya metadata buku).
+- Teks yang diterjemahkan/dijelaskan **dikirim ke provider terpilih** —
+  tertulis di Pengaturan → Terjemahan. Jangan menempel kunci milik orang lain
+  / kunci produksi ke perangkat bersama.
+- Domain endpoint yang diizinkan di kode didaftar eksplisit di
+  `scripts/check.cjs` (allowlist); URL kustom pengguna adalah input runtime
+  dan tidak di-hardcode.

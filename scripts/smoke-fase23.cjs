@@ -240,6 +240,81 @@ const driver = `
   openTranslationModal('たべる');
   await new Promise((r) => setTimeout(r, 50));
   A('romaji-modal-hook', el.transRomajiText.textContent.includes('taberu'), el.transRomajiText.textContent);
+
+  // --- Kamus JA→ID Wikikamus (prioritas N5 dulu, lalu Wikikamus) ---
+  const w1 = await lookupWord('秘書', null, null);
+  A('jaid-gloss', w1.idGloss && w1.idGloss.id.includes('sekretaris') && w1.idGloss.src === 'wikikamus', JSON.stringify(w1.idGloss));
+  const w2 = await lookupWord('食べる', null, null);
+  A('n5-prioritas', w2.idGloss && w2.idGloss.id === 'makan' && w2.idGloss.src === 'n5', JSON.stringify(w2.idGloss));
+  await renderVocabularyBreakdown('秘書');
+  const bt = el.transWordsList.children.map((c) => c.textContent).join(' ');
+  A('jaid-label-kartu', bt.includes('Wikikamus') && bt.includes('sekretaris'), bt.slice(0, 160));
+
+  // --- Tahap 2: kamus penuh + gabungan majemuk + nama diri ---
+  await loadFullDictBG();
+  A('fullmap-siap', jmdictFullReady === true);
+  const wf = await lookupWord('文化祭', null, null);
+  A('full-ada-bunkasai', !!(wf.entry && wf.entry.g && wf.entry.g[0].includes('festival')), JSON.stringify(wf.entry && wf.entry.g));
+  const wb = await lookupWord('ぼやく', null, null);
+  A('full-ada-boyaku', !!(wb.entry && wb.entry.g && wb.entry.g[0].includes('grumble')));
+  const wn = await lookupWord('比企谷', 'ヒキガヤ', '比企谷', { p: '名詞', d1: '固有名詞' });
+  A('nama-diri', wn.isName === true && !wn.entry && wn.romaji.includes('hikigaya'), wn.kana + '/' + wn.romaji);
+  const wn2 = await lookupWord('xyzabc', null, null, { p: '名詞', d1: '一般' });
+  A('bukan-nama-tetap-gagal', wn2.isName !== true && !wn2.entry);
+  A('compound-pick', (() => {
+    const c = pickCompoundSpan([{ s: '実行委員会', i: 5, n: 3 }, { s: '委員会', i: 7, n: 2 }], 6, 2);
+    return !!(c && c.s === '実行委員会');
+  })());
+  A('compound-skip-pendek', pickCompoundSpan([{ s: '実行委員会', i: 5, n: 3 }], 6, 20) === null);
+  A('compound-skip-luar', pickCompoundSpan([{ s: '実行委員会', i: 5, n: 3 }], 20, 1) === null);
+  A('compound-tanpa-list', pickCompoundSpan(null, 6, 1) === null);
+
+  // --- Tahap 3: jembatan EN→ID (gloss Inggris → Indonesia kasar) ---
+  A('bridge-dasar', bridgeEnGloss(['school festival']) === 'sekolah festival');
+  A('bridge-skip-stop', bridgeEnGloss(['to school']) === 'sekolah');
+  A('bridge-kurung-relatif', bridgeEnGloss(['red wine (drink)']) === 'merah anggur');
+  A('bridge-tanpa-hit', bridgeEnGloss(['xyzzy plugh']) === null);
+  A('bridge-tanpa-gloss', bridgeEnGloss([]) === null && bridgeEnGloss(null) === null);
+  const w3 = await lookupWord('文化祭', null, null);
+  A('bridge-via-lookup', !!(w3.bridgeId && w3.bridgeId.includes('sekolah') && !w3.idGloss), JSON.stringify(w3.bridgeId));
+  const w4 = await lookupWord('食べる', null, null);
+  A('bridge-tidak-timpa-id', !w4.bridgeId && !!(w4.idGloss && w4.idGloss.src === 'n5'));
+  // --- Tahap 4: provider dual-mode (fungsi murni) ---
+  config.translationProvider = 'mymemory'; config.translationApiKey = '';
+  A('prov-mymemory', translationProviderLabel() === 'MyMemory' && !translationProviderDef().needsKey && !translationLlmReady());
+  config.translationProvider = 'gemini';
+  A('prov-gemini-nokey', translationProviderDef().needsKey && !translationHasKey() && !translationLlmReady());
+  config.translationApiKey = 'kunci-palsu';
+  A('prov-gemini-key', translationHasKey() && translationLlmReady());
+  config.translationProvider = 'openai'; config.translationApiKey = '';
+  A('prov-openai-nokey', !translationLlmReady());
+  config.translationProvider = 'mymemory'; config.translationApiKey = '';
+  A('prompt-terjemah', promptTranslate('おはよう').includes('おはよう') && promptTranslate('x').includes('HANYA'));
+  const ep = buildExplainPrompt('おはよう');
+  A('prompt-jelaskan', ep.includes('1) Terjemahan') && ep.includes('2) Makna') && ep.includes('3) Tata bahasa') && ep.includes('おはよう'));
+  config.translationProvider = 'gemini'; config.translationModel = 'm1';
+  const k1 = transExplainKey('abc');
+  config.translationModel = 'm2';
+  const k2 = transExplainKey('abc');
+  config.translationProvider = 'openai';
+  const k3 = transExplainKey('abc');
+  A('kunci-cache-unik', k1 !== k2 && k2 !== k3 && k1 !== k3);
+  config.translationProvider = 'mymemory'; config.translationModel = '';
+  let onlineGagal = false;
+  try { await translateOnline('おはよう', false); } catch (e) { onlineGagal = true; }
+  A('online-gagal-tanpa-net', onlineGagal === true);
+  config.translationMode = 'offline';
+  await translateText('食べる');
+  await new Promise((r) => setTimeout(r, 50));
+  A('mode-offline-literal', el.transResultText.textContent.includes('makan') && el.transSourceLabel.textContent === 'Offline', el.transSourceLabel.textContent);
+  config.translationMode = 'online';
+  await translateText('食べる');
+  await new Promise((r) => setTimeout(r, 50));
+  A('mode-online-gagal-jujur', el.transResultText.textContent.includes('Online gagal'), el.transResultText.textContent.slice(0, 80));
+  config.translationMode = 'auto';
+  syncExplainSection();
+  await explainText();
+  A('jelaskan-tanpa-kunci-aman', true);
   globalThis.__done = true;
 })();
 `;

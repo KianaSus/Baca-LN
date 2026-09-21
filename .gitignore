@@ -6,8 +6,9 @@ out/
 .vscode/
 *.log
 kokoro (1).html
-# Hasil build kamus (bulk, bangun ulang via scripts/build-dict.cjs)
+# Hasil build kamus (bulk, bangun ulang via scripts/build-dict.cjs [--full])
 vendor/jmdict-compact.json
+vendor/jmdict-full.json
 vendor/kanjidic-compact.json
 # Dict biner kuromoji (±17MB, unduh via scripts/fetch-kuromoji.cjs)
 vendor/kuromoji-dict/
