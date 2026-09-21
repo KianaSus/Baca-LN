@@ -30,7 +30,7 @@
 
 ---
 
-## ✨ Tentang Kokoro
+##  Tentang Kokoro
 
 **Kokoro (心)** dirancang khusus bagi pecinta Light Novel dan pembelajar bahasa Jepang yang menginginkan pengalaman membaca buku fisik (*Bunkobon*) langsung di perangkat digital mereka. 
 
