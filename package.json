@@ -1,0 +1,51 @@
+{
+  "name": "kokoro-ln-reader",
+  "version": "2.0.0",
+  "description": "Kokoro — Light Novel & EPUB Reader (Play Books / Kindle style). Offline-first, single-file WebView-ready.",
+  "license": "MIT",
+  "author": "Kokoro Contributors",
+  "keywords": [
+    "epub",
+    "light-novel",
+    "reader",
+    "tategaki",
+    "pwa",
+    "capacitor",
+    "offline-first"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check.cjs",
+    "smoke": "node scripts/smoke-fase23.cjs",
+    "verify:n5": "node scripts/verify-n5.cjs",
+    "dev": "npx serve -l 5173 .",
+    "preview": "npx serve .",
+    "dist": "node scripts/copy-dist.cjs",
+    "cap:init": "npx @capacitor/cli init Kokoro com.kokoro.reader --web-dir=\"dist\"",
+    "cap:add-android": "npx @capacitor/cli add android",
+    "cap:assets": "npx @capacitor/assets generate --android",
+    "cap:sync": "npx @capacitor/cli sync",
+    "cap:open-android": "npx @capacitor/cli open android",
+    "apk:prepare": "npm run dist && npx @capacitor/cli sync android",
+    "electron:dev": "npx electron electron-main.js",
+    "tauri:dev": "npx @tauri-apps/cli dev",
+    "tauri:build": "npx @tauri-apps/cli build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.0",
+    "@capacitor/core": "^6.1.0",
+    "electron": "^31.0.0",
+    "sax": "^1.6.1",
+    "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "@capacitor/app": "^6.0.3",
+    "@capacitor/filesystem": "^6.0.4",
+    "@capacitor/share": "^6.0.4"
+  }
+}

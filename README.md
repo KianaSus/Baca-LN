@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/kokoro-reader/app"><img src="https://img.shields.io/badge/version-2.0.0-e07a5f?style=flat-square" alt="Version 2.0.0"></a>
+  <a href="https://github.com/KianaSus/Baca-LN"><img src="https://img.shields.io/badge/version-2.0.0-e07a5f?style=flat-square" alt="Version 2.0.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3d5a80?style=flat-square" alt="License MIT"></a>
   <img src="https://img.shields.io/badge/offline--first-100%25%20CDN--Free-2a9d8f?style=flat-square" alt="Offline First">
   <img src="https://img.shields.io/badge/format-EPUB%20%E2%80%A2%20Tategaki-ee9b00?style=flat-square" alt="Format EPUB & Tategaki">
